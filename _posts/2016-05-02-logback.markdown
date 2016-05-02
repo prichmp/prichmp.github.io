@@ -1,0 +1,80 @@
+---
+layout: documentation
+title:  "Using Logback"
+category: documentation
+---
+
+# Using Logback
+
+[Logback](http://logback.qos.ch/) is a SLF4J-based logging framework.
+
+## Project Setup
+
+Add the following dependencies to your Maven POM. Check with The [Central Maven Repository](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22ch.qos.logback%22%20AND%20a%3A%22logback-classic%22) to determine the current version for Logback. Check the [download page]{ {{ "/download.html" | prepend: site.baseurl }} } for the current Write Forward version.
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback-version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.writeforward</groupId>
+      <artifactId>logger</artifactId>
+      <version>${write-forward-version}</version>
+    </dependency>
+
+
+## Configuring Write Forward
+Use SLF4J to output to Logback. To configure Write Forward the recommended way is to put a configuration file in the  `/src/main/resources/` folder in your Java, Scala, or Kotlin project.
+
+Here is an example `/src/main/resources/write-forward-config.yaml` file for Logback.
+
+{% raw %}
+    writeforward:
+             isslow: true
+             numberofstackframes: 5
+             outputs:
+                  - name: slf4j
+                    format: |+
+                        ===================================================================================================================
+                        [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
+
+                        {{ message }}
+
+                        {% if values is not empty %}
+                        {% for value in values %}
+                        {{ value.key }} = {{ value.value }}
+
+                        {% endfor %}
+                        {% endif %}
+{% endraw %}
+
+
+## Configuring Logback
+To configure Logback, consult the [Logback documentation](http://logback.qos.ch/manual/configuration.html).
+
+Logback, in similar style to Write Forward, also likes to have a configuration file live in the `/src/main/resources` folder in your project.
+
+To use the following sample configuration create a new file with the name and location `/src/main/resources/logback.xml` and copy the below XML content into it. Once the file is in place Logback should automatically locate it on the next run.
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <configuration>
+
+    	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+    		    <pattern>%msg</pattern>
+    		</encoder>
+
+    	</appender>
+
+    	<logger name="com.mkyong.web" level="debug"
+    		additivity="false">
+    		<appender-ref ref="STDOUT" />
+    	</logger>
+
+    	<root level="debug">
+    		<appender-ref ref="STDOUT" />
+    	</root>
+
+    </configuration>

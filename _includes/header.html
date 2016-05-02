@@ -11,9 +11,9 @@
                 <div id="nav-col" class="column column-80">
                     <nav>
                       <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="documentation.html">Documentation</a></li>
-                        <li><a href="download.html">Download</a></li>
+                        <li><a href="{{ site.baseurl }}/">Home</a></li>
+                        <li><a href="{{ "/documentation.html" | prepend: site.baseurl }}">Documentation</a></li>
+                        <li><a href="{{ "/download.html" | prepend: site.baseurl }}">Download</a></li>
                         <li><a href="//github.com/prichmp/Write-Forward">GitHub</a></li>
                       </ul>
                     </nav>

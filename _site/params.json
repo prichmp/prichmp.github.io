@@ -1,0 +1,6 @@
+{
+  "name": "Write-forward",
+  "tagline": "The Write Forward static, fluent, Java logger.",
+  "body": "# Write Forward\r\n\r\nDo you ever get tired of writing `private static Logger LOGGER = LoggerFactory.getLogger(Example.getClass())` at the top of each class?\r\n\r\n## Introducing the Write Forward Static Fluent Logger Framework!\r\n\r\nFeatures:\r\n\r\n- Use with your favorite logger framework including log4j, logback, java.util.logging, and SLF4J.\r\n- Log interesting variables in your code easily and quickly.\r\n- Output to multiple loggers at the same time.\r\n- See what line number the logger was called from in \"slow\" mode.\r\n- Has a \"fast\" and \"slow\" setting for production and development respectively.\r\n- The framework is extensible, with the ability to implement logging to your own database or other location.\r\n- Use a fluent syntax to compose logging messages that get formatted and output.\r\n\r\n## How do I use it?\r\n\r\n    Log.message(\"The GET request failed\")\r\n    .error()\r\n    .withException(ex)\r\n    .withValue(\"Url\", url)\r\n    .withTag(\"FATAL\")\r\n    .write();\r\n\r\n## License?\r\nMIT - Use it for whatever you want.\r\n\r\n\r\n\r\n\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}

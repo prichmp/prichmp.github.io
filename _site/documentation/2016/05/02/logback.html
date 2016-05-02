@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Download</title>
+    <title>Using Logback</title>
 
     <!-- Mobile tags -->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=device-width, height=device-height">
@@ -12,8 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <!-- HTML Metadata -->
-    <meta name="description" content="The Write Forward Logging Framework for Java simplifies logging for Java. Write easy-to-use, portable, and future-proof logging code. Works with SLF4J, Log4J, Logback, and java.util.logging.
-">
+    <meta name="description" content="Using Logback">
     <meta name="keywords" content="">
 
     <meta name='robots' content='index,follow'>
@@ -23,30 +22,27 @@
     <meta name='author' content='Matthew Prichard <green.matt@comcast.net>'>
 
     <!-- Permalink location of the page (full https://www.example.com format) -->
-    <link rel="canonical" href="http://prichmp.github.io/Write-Forward/download.html">
+    <link rel="canonical" href="http://prichmp.github.io/Write-Forward/documentation/2016/05/02/logback.html">
 
     <!-- Atom/RSS feeds -->
     <link rel="alternate" type="application/rss+xml" title="Write Forward" href="http://prichmp.github.io/Write-Forward/feed.xml">
 
     <!-- Schema.org micro data -->
-    <meta itemprop="name" content="Download">
-    <meta name="description" content="The Write Forward Logging Framework for Java simplifies logging for Java. Write easy-to-use, portable, and future-proof logging code. Works with SLF4J, Log4J, Logback, and java.util.logging.
-">
+    <meta itemprop="name" content="Using Logback">
+    <meta name="description" content="Using Logback">
     <meta itemprop="image" content="images/icons/favicon-194x194.png">
 
     <!-- Facebook open graph -->
     <meta property="og:url" content="/Write-Forward">
-    <meta property="og:title" content="Download">
+    <meta property="og:title" content="Using Logback">
     <meta property="og:image" content="images/icons/favicon-194x194.png">
-    <meta property="og:site_name" content="Download">
-    <meta property="og:description" content="The Write Forward Logging Framework for Java simplifies logging for Java. Write easy-to-use, portable, and future-proof logging code. Works with SLF4J, Log4J, Logback, and java.util.logging.
-">
+    <meta property="og:site_name" content="Using Logback">
+    <meta property="og:description" content="Using Logback">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Download">
-    <meta name="twitter:description" content="The Write Forward Logging Framework for Java simplifies logging for Java. Write easy-to-use, portable, and future-proof logging code. Works with SLF4J, Log4J, Logback, and java.util.logging.
-">
+    <meta name="twitter:title" content="Using Logback">
+    <meta name="twitter:description" content="Using Logback">
     <meta name="twitter:image" content="images/icons/favicon-194x194.png">
 
     <!-- Icons -->
@@ -136,34 +132,82 @@
 
                         <div class="column column-80">
 
-                            <h1 id="download">Download</h1>
+                            <h1 id="using-logback">Using Logback</h1>
 
-<p>Thanks for downloading Write Forward!</p>
+<p><a href="http://logback.qos.ch/">Logback</a> is a SLF4J-based logging framework.</p>
 
-<h2 id="current-version">Current Version</h2>
+<h2 id="project-setup">Project Setup</h2>
 
-<h3 id="maven">Maven</h3>
+<p>Add the following dependencies to your Maven POM. Check with The <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22ch.qos.logback%22%20AND%20a%3A%22logback-classic%22">Central Maven Repository</a> to determine the current version for Logback. Check the [download page]{ /Write-Forward/download.html } for the current Write Forward version.</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>&lt;dependency&gt;
+  &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+  &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
+  &lt;version&gt;${logback-version}&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
   &lt;groupId&gt;org.writeforward&lt;/groupId&gt;
   &lt;artifactId&gt;logger&lt;/artifactId&gt;
-  &lt;version&gt;0.0.2&lt;/version&gt;
+  &lt;version&gt;${write-forward-version}&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 </div>
 
-<h3 id="gradle">Gradle</h3>
-<div class="highlighter-rouge"><pre class="highlight"><code>'org.writeforward:logger:0.0.2'
+<h2 id="configuring-write-forward">Configuring Write Forward</h2>
+<p>Use SLF4J to output to Logback. To configure Write Forward the recommended way is to put a configuration file in the  <code class="highlighter-rouge">/src/main/resources/</code> folder in your Java, Scala, or Kotlin project.</p>
+
+<p>Here is an example <code class="highlighter-rouge">/src/main/resources/write-forward-config.yaml</code> file for Logback.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>writeforward:
+         isslow: true
+         numberofstackframes: 5
+         outputs:
+              - name: slf4j
+                format: |+
+                    ===================================================================================================================
+                    [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
+
+                    {{ message }}
+
+                    {% if values is not empty %}
+                    {% for value in values %}
+                    {{ value.key }} = {{ value.value }}
+
+                    {% endfor %}
+                    {% endif %}
 </code></pre>
 </div>
 
-<h3 id="sbt">SBT</h3>
-<div class="highlighter-rouge"><pre class="highlight"><code>libraryDependencies += "org.writeforward" % "logger" % "0.0.2"
+<h2 id="configuring-logback">Configuring Logback</h2>
+<p>To configure Logback, consult the <a href="http://logback.qos.ch/manual/configuration.html">Logback documentation</a>.</p>
+
+<p>Logback, in similar style to Write Forward, also likes to have a configuration file live in the <code class="highlighter-rouge">/src/main/resources</code> folder in your project.</p>
+
+<p>To use the following sample configuration create a new file with the name and location <code class="highlighter-rouge">/src/main/resources/logback.xml</code> and copy the below XML content into it. Once the file is in place Logback should automatically locate it on the next run.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+
+	<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"STDOUT"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.ConsoleAppender"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;encoder</span> <span class="na">class=</span><span class="s">"ch.qos.logback.classic.encoder.PatternLayoutEncoder"</span><span class="nt">&gt;</span>
+		    <span class="nt">&lt;pattern&gt;</span>%msg<span class="nt">&lt;/pattern&gt;</span>
+		<span class="nt">&lt;/encoder&gt;</span>
+
+	<span class="nt">&lt;/appender&gt;</span>
+
+	<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"com.mkyong.web"</span> <span class="na">level=</span><span class="s">"debug"</span>
+		<span class="na">additivity=</span><span class="s">"false"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"STDOUT"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/logger&gt;</span>
+
+	<span class="nt">&lt;root</span> <span class="na">level=</span><span class="s">"debug"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"STDOUT"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/root&gt;</span>
+
+<span class="nt">&lt;/configuration&gt;</span>
 </code></pre>
 </div>
-
-<h3 id="source">Source</h3>
-<p>Download from Github <a href="https://github.com/prichmp/Write-Forward">here</a>.</p>
 
 
                         </div><!-- .column -->

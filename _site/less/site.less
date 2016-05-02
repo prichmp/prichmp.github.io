@@ -45,8 +45,7 @@ body
 {
     margin: 0;
     padding: 0;
-    background: #ffffff;
-    background-image:url('../images/blurry.jpg');
+    background: #B77A68;
     background-repeat: no-repeat;
     background-position: top;
     background-size: cover;
@@ -115,6 +114,7 @@ header
 {
   background-color:#ffffff;
   transform:skewX(20deg);
+  font-weight:700;
 }
 
 #nav-col
@@ -167,10 +167,18 @@ main
 //Documentation
 //=======================================
 
+table
+{
+  tbody tr:nth-child(odd) {
+     background-color: #eee;
+  }
+}
+
 .toc
 {
   list-style-type:none;
   font-weight:bold;
+  padding-left: 0;
 
   ul
   {

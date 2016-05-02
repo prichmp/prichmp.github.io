@@ -1,0 +1,55 @@
+---
+layout: documentation
+title:  "Using SLF4J"
+category: documentation
+---
+
+# Using SLF4J 
+
+[SLF4J](http://www.slf4j.org/) is an abstraction for other logging frameworks. All of the most popular logging frameworks support a SLF4J implementation. This makes SLF4J a nice target for Write Forward to output to.
+
+Output to SLF4J is done through the `org.writeforward.logger.writers.Slf4jOutput` class. The SLF4J logger that Write Forward outputs to is managed by this class. The logger that Write Forward uses has the name of this class. (i.e. `LoggerFactory.getLogger(Slf4jOutput.class);`)
+
+## Configuring Write Forward
+To configure Write Forward the recommended way is to put a configuration file in the  `/src/main/resources/` folder in your Java, Scala or Kotlin project.
+
+Here is an example `/src/main/resources/write-forward-config.yaml` file.
+
+{% raw %}
+
+    writeforward: #Root of the configuration
+             isslow: true #If true performs slow reflection operations
+             numberofstackframes: 5 #Determines the max number of stack frames put into the message's stack trace.
+             outputs:
+                  - name: slf4j #Uses the default SLF4J outputter.
+                    format: |+ #Formats the message using Pebble
+                        ===================================================================================================================
+                        [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
+
+                        {{ message }}
+
+                        {% if values is not empty %}
+                        {% for value in values %}
+                        {{ value.key }} = {{ value.value }}
+
+                        {% endfor %}
+                        {% endif %}
+{% endraw %}
+## Levels
+
+Write Forward uses the following levels:
+ - TRACE
+ - DEBUG
+ - INFO
+ - WARN
+ - ERROR
+ - FATAL
+
+SLF4J only recognizes the following levels:
+ - TRACE
+ - DEBUG
+ - INFO
+ - WARN
+ - ERROR
+
+There is no FATAL level in SLF4J. When Write Forward uses SLF4J, it adds a "FATAL" marker to any FATAL-level events. SLF4J will convert the fatal marker back into the FATAL level if the underlying framework supports the FATAL logging level.

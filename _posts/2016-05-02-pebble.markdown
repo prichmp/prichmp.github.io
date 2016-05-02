@@ -1,0 +1,62 @@
+---
+layout: documentation
+title:  "Pebble Formatter"
+category: documentation
+---
+
+# The Pebble Formatter
+Write Forward uses [Pebble](http://www.mitchellbosecke.com/pebble/home) a lightweight, decently-fast template engine originally designed for webpages. Write Forward uses it to format output messages. One of the advantages of Pebble is that the message is compiled once and reused many times.
+
+## Configuration File
+
+The following is a sample `/src/main/resources/write-forward-config.yaml` configuration file.
+
+{% raw %}
+    writeforward:
+             isslow: true
+             numberofstackframes: 2
+             outputs:
+                  - name: console
+                    format: |+ # See http://stackoverflow.com/questions/3790454/in-yaml-how-do-i-break-a-string-over-multiple-lines for YAML multiline strings.
+
+                        [{{ level }}] {{ marker }} {{ timestamp }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
+
+                        {{ message }}
+
+                        {% if exception is not empty %}
+                        {{ exception }}
+
+                        {% endif %}
+                        {% if values is not empty %}
+                        {% for value in values %}
+                        {{ value.key }} = {{ value.value }}
+
+                        {% endfor %}
+                        {% endif %}
+
+{% endraw %}
+
+The writeforward --> outputs --> format key in the YAML file holds the format string for Pebble. By editing this format the output to the underlying logging framework is changed.
+
+## Applied to the Format
+The following variables are applied to each format when a new message is being formatted using Pebble.
+
+| Key | Description |
+| ------------- | -----:|
+|exception| exception.toString() |
+|exception.message| exception.getLocalizedMessage() |
+|exception.cause| exception.getCause().toString() |
+|exception.name| exception.getClass().getName() |
+|timestamp| May 2, 2016 12:49:58 PM MDT |
+|time| 12:49:58 PM MDT |
+|date| May 2, 2016 |
+|method| The method name that Write Forward was called from. (e.x. myMethod)  |
+|level| One of the logging levels in all caps (e.x. DEBUG) |
+|line| The line number that Write Forward was called from. May be -1 if the Write Forward configuration isslow = true  |
+|values| A collection of map entries (i.e. values.entrySet()) representing any .withValue(String key, String value) entries. |
+|thread| The thread name that Write Forward was called from. |
+|message| The message as set with .message(String message) |
+|file| The filename of the file Write Forward was called from (e.x. MyClass.java) |
+|stacktrace| An array of [StackTraceElement](https://docs.oracle.com/javase/8/docs/api/java/lang/StackTraceElement.html) |
+|marker| Each marker output with a space in-between (e.x. HTTPENGINE PLUGIN)  |
+|class| The full class name of the location Write Forward was called from. (e.x. com.company.project.MyClass) |
