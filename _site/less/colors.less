@@ -1,0 +1,24 @@
+/**
+ * Colors defined site-wide
+ * ===========================================================================
+ *
+ * Use this file to set colors and other variables that are used gobally.
+ * Putting the colors all in one place seems to make it easier.
+ *
+ */
+
+@text-color:#2d343a;
+
+//Color for :selection psudo-seletor
+@selection-color: #CC583E;
+
+//<a href=""></a> colors
+@link-color:#5F4455;
+@visited-link-color: lighten(#5F4455,20%);
+@hover-link-color: saturate(@link-color,50%);
+@active-link-color: darken(@hover-link-color, 20%);
+
+@nav-link-color: #ffffff;//lighten(#351e2e, 10%);
+@nav-visited-link-color: @nav-link-color;
+@nav-hover-link-color: #E4A594;
+@nav-active-link-color: darken(@nav-hover-link-color, 50%);

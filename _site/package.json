@@ -1,0 +1,13 @@
+     {
+         "name": "mp-framework",
+         "description":"A simple CSS HTML boilerplate",
+         "version": "0.1.0",
+         "devDependencies": {
+             "gulp": "*",
+             "gulp-minify-css": "*",
+             "gulp-changed": "*",
+             "gulp-rename": "*",
+             "gulp-less": "*",
+             "gulp-image-resize": "*"
+         }
+     }

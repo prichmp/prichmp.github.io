@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Write Forward</title>
+
+    <!-- Mobile tags -->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=device-width, height=device-height">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <!-- HTML Metadata -->
+    <meta name="description" content="The Write Forward Logging Framework for Java simplifies logging for Java. Write easy-to-use, portable, and future-proof logging code. Works with SLF4J, Log4J, Logback, and java.util.logging.
+">
+    <meta name="keywords" content="">
+
+    <meta name='robots' content='index,follow'>
+    <meta name='revisit-after' content='7 days'>
+    <meta name='revised' content='2016-05-01 22:26:14 -0600'>
+
+    <meta name='author' content='Matthew Prichard <green.matt@comcast.net>'>
+
+    <!-- Permalink location of the page (full https://www.example.com format) -->
+    <link rel="canonical" href="http://prichmp.github.io/Write-Forward/">
+
+    <!-- Atom/RSS feeds -->
+    <link rel="alternate" type="application/rss+xml" title="Write Forward" href="http://prichmp.github.io/Write-Forward/feed.xml">
+
+    <!-- Schema.org micro data -->
+    <meta itemprop="name" content="Write Forward">
+    <meta name="description" content="The Write Forward Logging Framework for Java simplifies logging for Java. Write easy-to-use, portable, and future-proof logging code. Works with SLF4J, Log4J, Logback, and java.util.logging.
+">
+    <meta itemprop="image" content="images/icons/favicon-194x194.png">
+
+    <!-- Facebook open graph -->
+    <meta property="og:url" content="/Write-Forward">
+    <meta property="og:title" content="Write Forward">
+    <meta property="og:image" content="images/icons/favicon-194x194.png">
+    <meta property="og:site_name" content="Write Forward">
+    <meta property="og:description" content="The Write Forward Logging Framework for Java simplifies logging for Java. Write easy-to-use, portable, and future-proof logging code. Works with SLF4J, Log4J, Logback, and java.util.logging.
+">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Write Forward">
+    <meta name="twitter:description" content="The Write Forward Logging Framework for Java simplifies logging for Java. Write easy-to-use, portable, and future-proof logging code. Works with SLF4J, Log4J, Logback, and java.util.logging.
+">
+    <meta name="twitter:image" content="images/icons/favicon-194x194.png">
+
+    <!-- Icons -->
+    <!-- Apple iOS Icons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="images/icons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="images/icons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/icons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/icons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/icons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/icons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/icons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/icons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/icons/apple-touch-icon-180x180.png">
+    <!-- HTML Icons -->
+    <link rel="shortcut icon" type="image/png" href="images/icons/favicon-32x32.png" sizes="32x32">
+    <link rel="shortcut icon" type="image/png" href="images/icons/favicon-194x194.png" sizes="194x194">
+    <link rel="shortcut icon" type="image/png" href="images/icons/favicon-96x96.png" sizes="96x96">
+    <link rel="shortcut icon" type="image/png" href="images/icons/favicon-16x16.png" sizes="16x16">
+    <!-- Android Icons and top bar color -->
+    <link rel="manifest" href="images/icons/manifest.json">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Windows Phone/Windows 10 Icons and metro tile color -->
+    <meta name="msapplication-TileImage" content="images/icons/mstile-144x144.png">
+    <meta name="msapplication-TileColor" content="#ed1c24">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/Write-Forward/css/site.css">
+
+    <!-- Syntax highlighter -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+    <header class="row-wrapper">
+
+        <div class="row">
+
+                <div class="column column-20">
+                    <div class="logo"><a class="site-title" href="/Write-Forward/">Write Forward</a></div>
+                </div><!-- .column -->
+
+                <div id="nav-col" class="column column-80">
+                    <nav>
+                      <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="download.html">Download</a></li>
+                        <li><a href="//github.com/prichmp/Write-Forward">GitHub</a></li>
+                      </ul>
+                    </nav>
+                </div><!-- .column -->
+
+        </div><!-- .row -->
+
+    </header>
+
+
+
+                <main>
+
+                <div class="row-wrapper">
+                    <div class="row">
+
+                        <div class="column column-66">
+                          <h1>Write Forward</h1>
+
+                          <p>
+                            The Write Forward framework is a logging library written in Java.
+                            It is designed to help developers write easy-to-use, portable, and
+                            future-proof logging code.
+
+                            Write Forward is a layer that sits on top of other logging frameworks - such
+                            as <a href="http://logback.qos.ch/">Logback</a>,
+                            <a href="http://logging.apache.org/log4j/2.x/">Log4j2</a>, and
+                            <a href="http://docs.oracle.com/javase/8/docs/api/java/util/logging/package-summary.html">java.util.logging</a>.
+                            Write Forward by itself
+                            has no ability to write the log messages to a file. Instead Write Forward exposes
+                            an API and then forwards the logging message to your choice of logging framework.
+                            If the logging framework changes in your project at some future point no changes
+                            to your code is required.
+                          </p>
+
+                          <h2>Features</h2>
+
+                          <ul>
+                            <li>Use with your favorite logger framework including <a href="http://logging.apache.org/log4j/2.x/">Log4j2</a>, <a href="http://logback.qos.ch/">Logback</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/logging/package-summary.html">java.util.logging</a>, and <a href="http://www.slf4j.org/">SLF4J</a>.</li>
+                            <li>Log interesting variables in your code easily and quickly.</li>
+                            <li>Output to multiple loggers at the same time.</li>
+                            <li>Has a "fast" and "slow" setting for production and development respectively.</li>
+                            <li>See what line number the logger was called from in "slow" mode.</li>
+                            <li>Automatically checks the underlying framework to see if the level is enabled.</li>
+                            <li>The framework is extensible, with the ability to implement logging to your own database or other location.</li>
+                            <li>Use a fluent syntax to compose logging messages that get formatted and output.</li>
+                          </ul>
+
+                          <h2>License?</h2>
+
+                          <p>MIT - Use it for whatever you want.</p>
+
+
+                        </div><!-- .column -->
+
+                        <div class="column column-33">
+                          <h2>How do I use it?</h2>
+                          <pre><code class="java">
+import org.writeforward.logger.Log;
+
+...
+
+catch(HTTPException ex)
+{
+  Log.message("The GET request failed.")
+  .withException(ex)
+  .withValue("Url", url)
+  .fatal();
+}
+
+...
+                          </code></pre>
+
+                        </div><!-- .column -->
+
+                    </div><!-- .row -->
+                </div><!-- .row-wrapper -->
+
+            </main>
+
+
+
+    
+            <footer class="row-wrapper">
+
+                <div class="row">
+
+                    <div class="column column-50">
+                        Hosted by <a href="https://pages.github.com/">Github Pages</a>
+                    </div><!-- .column -->
+
+                    <div class="column column-50">
+                        <a href="https://github.com/prichmp/Write-Forward">Fork this on Github!</a>
+                    </div><!-- .column -->
+
+                </div><!-- .row -->
+
+            </footer>
+
+        </div><!-- #all -->
+
+        <!-- End of body Javascript  -->
+        <!-- ======================================================================================= -->
+        <!-- Syntax Highlighting init -->
+        <script>
+          hljs.initHighlightingOnLoad();
+        </script>
+        <!-- Google Analytics -->
+        <script>
+
+        </script>
+
+
+  </body>
+</html>

@@ -1,75 +1,73 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Write-forward by prichmp</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-light.css">
-    <meta name="viewport" content="width=device-width">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Write-forward</h1>
-        <p>The Write Forward static, fluent, Java logger.</p>
-
-        <p class="view"><a href="https://github.com/prichmp/Write-Forward">View the Project on GitHub <small>prichmp/Write-Forward</small></a></p>
+---
+layout: default
+---
 
 
-        <ul>
-          <li><a href="https://github.com/prichmp/Write-Forward/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/prichmp/Write-Forward/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/prichmp/Write-Forward">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a id="write-forward" class="anchor" href="#write-forward" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Write Forward</h1>
+            <main>
 
-<p>Do you ever get tired of writing <code>private static Logger LOGGER = LoggerFactory.getLogger(Example.getClass())</code> at the top of each class?</p>
+                <div class="row-wrapper">
+                    <div class="row">
 
-<h2>
-<a id="introducing-the-write-forward-static-fluent-logger-framework" class="anchor" href="#introducing-the-write-forward-static-fluent-logger-framework" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introducing the Write Forward Static Fluent Logger Framework!</h2>
+                        <div class="column column-66">
+                          <h1>Write Forward</h1>
 
-<p>Features:</p>
+                          <p>
+                            The Write Forward framework is a logging library written in Java.
+                            It is designed to help developers write easy-to-use, portable, and
+                            future-proof logging code.
 
-<ul>
-<li>Use with your favorite logger framework including log4j, logback, java.util.logging, and SLF4J.</li>
-<li>Log interesting variables in your code easily and quickly.</li>
-<li>Output to multiple loggers at the same time.</li>
-<li>See what line number the logger was called from in "slow" mode.</li>
-<li>Has a "fast" and "slow" setting for production and development respectively.</li>
-<li>The framework is extensible, with the ability to implement logging to your own database or other location.</li>
-<li>Use a fluent syntax to compose logging messages that get formatted and output.</li>
-</ul>
+                            Write Forward is a layer that sits on top of other logging frameworks - such
+                            as <a href="http://logback.qos.ch/">Logback</a>,
+                            <a href="http://logging.apache.org/log4j/2.x/">Log4j2</a>, and
+                            <a href="http://docs.oracle.com/javase/8/docs/api/java/util/logging/package-summary.html">java.util.logging</a>.
+                            Write Forward by itself
+                            has no ability to write the log messages to a file. Instead Write Forward exposes
+                            an API and then forwards the logging message to your choice of logging framework.
+                            If the logging framework changes in your project at some future point no changes
+                            to your code is required.
+                          </p>
 
-<h2>
-<a id="how-do-i-use-it" class="anchor" href="#how-do-i-use-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How do I use it?</h2>
+                          <h2>Features</h2>
 
-<pre><code>Log.message("The GET request failed")
-.error()
-.withException(ex)
-.withValue("Url", url)
-.withTag("FATAL")
-.write();
-</code></pre>
+                          <ul>
+                            <li>Use with your favorite logger framework including <a href="http://logging.apache.org/log4j/2.x/">Log4j2</a>, <a href="http://logback.qos.ch/">Logback</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/logging/package-summary.html">java.util.logging</a>, and <a href="http://www.slf4j.org/">SLF4J</a>.</li>
+                            <li>Log interesting variables in your code easily and quickly.</li>
+                            <li>Output to multiple loggers at the same time.</li>
+                            <li>Has a "fast" and "slow" setting for production and development respectively.</li>
+                            <li>See what line number the logger was called from in "slow" mode.</li>
+                            <li>Automatically checks the underlying framework to see if the level is enabled.</li>
+                            <li>The framework is extensible, with the ability to implement logging to your own database or other location.</li>
+                            <li>Use a fluent syntax to compose logging messages that get formatted and output.</li>
+                          </ul>
 
-<h2>
-<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License?</h2>
+                          <h2>License?</h2>
 
-<p>MIT - Use it for whatever you want.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/prichmp">prichmp</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
-  </body>
-</html>
+                          <p>MIT - Use it for whatever you want.</p>
+
+
+                        </div><!-- .column -->
+
+                        <div class="column column-33">
+                          <h2>How do I use it?</h2>
+                          <pre><code class="java">
+import org.writeforward.logger.Log;
+
+...
+
+catch(HTTPException ex)
+{
+  Log.message("The GET request failed.")
+  .withException(ex)
+  .withValue("Url", url)
+  .fatal();
+}
+
+...
+                          </code></pre>
+
+                        </div><!-- .column -->
+
+                    </div><!-- .row -->
+                </div><!-- .row-wrapper -->
+
+            </main>

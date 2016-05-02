@@ -1,0 +1,37 @@
+---
+layout: default
+---
+
+            <main>
+
+                <div class="row-wrapper">
+                    <div class="row">
+
+                        <div class="column column-66">
+                          {{ content }}
+                        </div><!-- .column -->
+
+                        <div class="column column-33">
+                          <h2>How do I use it?</h2>
+                          <pre><code class="java">
+import org.writeforward.logger.Log;
+
+...
+
+catch(HTTPException ex)
+{
+  Log.message("The GET request failed.")
+  .withException(ex)
+  .withValue("Url", url)
+  .fatal();
+}
+
+...
+                          </code></pre>
+
+                        </div><!-- .column -->
+
+                    </div><!-- .row -->
+                </div><!-- .row-wrapper -->
+
+            </main>
