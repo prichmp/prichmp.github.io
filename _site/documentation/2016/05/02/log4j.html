@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Using SLF4J</title>
+    <title>Using Log4j</title>
 
     <!-- Mobile tags -->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=device-width, height=device-height">
@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <!-- HTML Metadata -->
-    <meta name="description" content="Using SLF4J">
+    <meta name="description" content="Using Log4j">
     <meta name="keywords" content="">
 
     <meta name='robots' content='index,follow'>
@@ -22,27 +22,27 @@
     <meta name='author' content='Matthew Prichard <green.matt@comcast.net>'>
 
     <!-- Permalink location of the page (full https://www.example.com format) -->
-    <link rel="canonical" href="http://prichmp.github.io/Write-Forward/documentation/2016/05/02/slf4j.html">
+    <link rel="canonical" href="http://prichmp.github.io/Write-Forward/documentation/2016/05/02/log4j.html">
 
     <!-- Atom/RSS feeds -->
     <link rel="alternate" type="application/rss+xml" title="Write Forward" href="http://prichmp.github.io/Write-Forward/feed.xml">
 
     <!-- Schema.org micro data -->
-    <meta itemprop="name" content="Using SLF4J">
-    <meta name="description" content="Using SLF4J">
+    <meta itemprop="name" content="Using Log4j">
+    <meta name="description" content="Using Log4j">
     <meta itemprop="image" content="images/icons/favicon-194x194.png">
 
     <!-- Facebook open graph -->
     <meta property="og:url" content="/Write-Forward">
-    <meta property="og:title" content="Using SLF4J">
+    <meta property="og:title" content="Using Log4j">
     <meta property="og:image" content="images/icons/favicon-194x194.png">
-    <meta property="og:site_name" content="Using SLF4J">
-    <meta property="og:description" content="Using SLF4J">
+    <meta property="og:site_name" content="Using Log4j">
+    <meta property="og:description" content="Using Log4j">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Using SLF4J">
-    <meta name="twitter:description" content="Using SLF4J">
+    <meta name="twitter:title" content="Using Log4j">
+    <meta name="twitter:description" content="Using Log4j">
     <meta name="twitter:image" content="images/icons/favicon-194x194.png">
 
     <!-- Icons -->
@@ -144,29 +144,54 @@
 
                         <div class="column column-80">
 
-                            <h1 id="using-slf4j">Using SLF4J</h1>
+                            <h1 id="using-log4j">Using Log4j</h1>
 
-<p><a href="http://www.slf4j.org/">SLF4J</a> is an abstraction for other logging frameworks. All of the most popular logging frameworks support a SLF4J implementation. This makes SLF4J a nice target for Write Forward to output to.</p>
+<p><a href="http://logging.apache.org/log4j/2.x/">Log4j</a> is a popular logging framework. Write Forward only supports Log4j 2.x, bot the legacy Log4j 1.x.</p>
 
-<p>Output to SLF4J is done through the <code class="highlighter-rouge">org.writeforward.logger.writers.Slf4jOutput</code> class. The SLF4J logger that Write Forward outputs to is managed by this class. The logger that Write Forward uses has the name of this class. (i.e. <code class="highlighter-rouge">LoggerFactory.getLogger(Slf4jOutput.class);</code>)</p>
+<h2 id="project-setup">Project Setup</h2>
+
+<p>Add the following dependencies to your Maven POM. Check with the <a href="http://search.maven.org/">Central Maven Repository</a> to determine the current version for Log4j. Check the <a href="/Write-Forward/download.html">download page</a> for the current Write Forward version.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+  &lt;artifactId&gt;log4j-api&lt;/artifactId&gt;
+  &lt;version&gt;2.5&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+  &lt;artifactId&gt;log4j-core&lt;/artifactId&gt;
+  &lt;version&gt;2.5&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+   &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+   &lt;artifactId&gt;log4j-slf4j-impl&lt;/artifactId&gt;
+   &lt;version&gt;2.5&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+  &lt;groupId&gt;org.writeforward&lt;/groupId&gt;
+  &lt;artifactId&gt;logger&lt;/artifactId&gt;
+  &lt;version&gt;${write-forward-version}&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+</div>
 
 <h2 id="configuring-write-forward">Configuring Write Forward</h2>
-<p>To configure Write Forward the recommended way is to put a configuration file in the  <code class="highlighter-rouge">/src/main/resources/</code> folder in your Java, Scala or Kotlin project.</p>
+<p>Use SLF4J to output to Log4j2. To configure Write Forward the recommended way is to put a configuration file in the  <code class="highlighter-rouge">/src/main/resources/</code> folder in your Java, Scala, or Kotlin project.</p>
 
-<p>Here is an example <code class="highlighter-rouge">/src/main/resources/write-forward-config.yaml</code> file.</p>
+<p>Here is an example <code class="highlighter-rouge">/src/main/resources/write-forward-config.yaml</code> file for Log4j2.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>writeforward: #Root of the configuration
-         isslow: true #If true performs slow reflection operations
-         numberofstackframes: 5 #Determines the max number of stack frames put into the message's stack trace.
+<div class="highlighter-rouge"><pre class="highlight"><code>writeforward:
+         isslow: true
+         numberofstackframes: 5
          outputs:
-              - name: slf4j #Uses the default SLF4J outputter.
-                format: |+ #Formats the message using Pebble
-                    ===================================================================================================================
-                    [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
-
-                    {{ message }}
-
+              - name: log4j
+                format: |-
+                    {{ timestamp }} [{{ thread }}] {{ level }}{% if marker is not empty %} {{ marker }}{% endif %}{% if class is not empty %} {{ class }}:{{ line }}{% endif %} - {{ message }}
                     {% if values is not empty %}
+
                     {% for value in values %}
                     {{ value.key }} = {{ value.value }}
 
@@ -175,24 +200,34 @@
 </code></pre>
 </div>
 
-<h2 id="levels">Levels</h2>
+<h2 id="configuring-log4j">Configuring Log4j</h2>
+<p>To configure Log4j, consult the <a href="https://logging.apache.org/log4j/2.0/manual/index.html">Log4j documentation</a>.</p>
 
-<p>Write Forward uses the following levels:
- - TRACE
- - DEBUG
- - INFO
- - WARN
- - ERROR
- - FATAL</p>
+<p>The Log4j configuration file needs to be in the classpath somewhere. To use the following sample configuration create a new file with the name and location <code class="highlighter-rouge">/src/main/resources/log4j2.xml</code> and copy the below XML content into it. Log4j should automatically pick up the file.</p>
 
-<p>SLF4J only recognizes the following levels:
- - TRACE
- - DEBUG
- - INFO
- - WARN
- - ERROR</p>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;Configuration</span> <span class="na">status=</span><span class="s">"WARN"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;Appenders&gt;</span>
+    <span class="nt">&lt;Console</span> <span class="na">name=</span><span class="s">"Console"</span> <span class="na">target=</span><span class="s">"SYSTEM_OUT"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;PatternLayout</span> <span class="na">pattern=</span><span class="s">"%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/Console&gt;</span>
+    <span class="nt">&lt;Console</span> <span class="na">name=</span><span class="s">"WriteForward"</span> <span class="na">target=</span><span class="s">"SYSTEM_OUT"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;PatternLayout</span> <span class="na">pattern=</span><span class="s">"%msg%n"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/Console&gt;</span>
+  <span class="nt">&lt;/Appenders&gt;</span>
+  <span class="nt">&lt;Loggers&gt;</span>
+    <span class="nt">&lt;Logger</span> <span class="na">name=</span><span class="s">"org.writeforward.logger.writers.Slf4jOutput"</span> <span class="na">level=</span><span class="s">"trace"</span> <span class="na">additivity=</span><span class="s">"false"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;AppenderRef</span> <span class="na">ref=</span><span class="s">"WriteForward"</span> <span class="na">level=</span><span class="s">"trace"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/Logger&gt;</span>
+    <span class="nt">&lt;Root</span> <span class="na">level=</span><span class="s">"warn"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;AppenderRef</span> <span class="na">ref=</span><span class="s">"Console"</span> <span class="na">level=</span><span class="s">"warn"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/Root&gt;</span>
+  <span class="nt">&lt;/Loggers&gt;</span>
+<span class="nt">&lt;/Configuration&gt;</span>
+</code></pre>
+</div>
 
-<p>There is no FATAL level in SLF4J. When Write Forward uses SLF4J, it adds a “FATAL” marker to any FATAL-level events. SLF4J will convert the fatal marker back into the FATAL level if the underlying framework supports the FATAL logging level.</p>
+<p>The logger with the name org.writeforward.logger.writers.Slf4jOutput represents the output from WriteForward, and its’  is written plainly out with the <code class="highlighter-rouge">%msg%n</code> format. Everything else is written out with the full pattern.</p>
 
 
                         </div><!-- .column -->

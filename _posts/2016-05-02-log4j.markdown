@@ -1,0 +1,88 @@
+---
+layout: documentation
+title:  "Using Log4j"
+category: documentation
+---
+
+# Using Log4j
+
+[Log4j](http://logging.apache.org/log4j/2.x/) is a popular logging framework. Write Forward only supports Log4j 2.x, bot the legacy Log4j 1.x.
+
+## Project Setup
+
+Add the following dependencies to your Maven POM. Check with the [Central Maven Repository](http://search.maven.org/) to determine the current version for Log4j. Check the [download page]( {{ "/download.html" | prepend: site.baseurl }} ) for the current Write Forward version.
+
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.5</version>
+    </dependency>
+
+    <dependency>
+       <groupId>org.apache.logging.log4j</groupId>
+       <artifactId>log4j-slf4j-impl</artifactId>
+       <version>2.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.writeforward</groupId>
+      <artifactId>logger</artifactId>
+      <version>${write-forward-version}</version>
+    </dependency>
+
+
+## Configuring Write Forward
+Use SLF4J to output to Log4j2. To configure Write Forward the recommended way is to put a configuration file in the  `/src/main/resources/` folder in your Java, Scala, or Kotlin project.
+
+Here is an example `/src/main/resources/write-forward-config.yaml` file for Log4j2.
+
+{% raw %}
+    writeforward:
+             isslow: true
+             numberofstackframes: 5
+             outputs:
+                  - name: log4j
+                    format: |-
+                        {{ timestamp }} [{{ thread }}] {{ level }}{% if marker is not empty %} {{ marker }}{% endif %}{% if class is not empty %} {{ class }}:{{ line }}{% endif %} - {{ message }}
+                        {% if values is not empty %}
+
+                        {% for value in values %}
+                        {{ value.key }} = {{ value.value }}
+
+                        {% endfor %}
+                        {% endif %}
+{% endraw %}
+
+
+## Configuring Log4j
+To configure Log4j, consult the [Log4j documentation](https://logging.apache.org/log4j/2.0/manual/index.html).
+
+The Log4j configuration file needs to be in the classpath somewhere. To use the following sample configuration create a new file with the name and location `/src/main/resources/log4j2.xml` and copy the below XML content into it. Log4j should automatically pick up the file.
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Configuration status="WARN">
+      <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+          <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <Console name="WriteForward" target="SYSTEM_OUT">
+          <PatternLayout pattern="%msg%n"/>
+        </Console>
+      </Appenders>
+      <Loggers>
+        <Logger name="org.writeforward.logger.writers.Slf4jOutput" level="trace" additivity="false">
+          <AppenderRef ref="WriteForward" level="trace"/>
+        </Logger>
+        <Root level="warn">
+          <AppenderRef ref="Console" level="warn"/>
+        </Root>
+      </Loggers>
+    </Configuration>
+
+The logger with the name org.writeforward.logger.writers.Slf4jOutput represents the output from WriteForward, and its'  is written plainly out with the `%msg%n` format. Everything else is written out with the full pattern.
