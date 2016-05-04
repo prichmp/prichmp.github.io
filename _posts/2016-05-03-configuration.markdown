@@ -101,7 +101,7 @@ If a configuration file is not found on the classpath, Write forward will check 
                         {% endif %}
 {% endraw %}
 
-## Default Logback configuration
+### Default Logback configuration
 {% raw %}
 
     writeforward: #Root of the configuration
