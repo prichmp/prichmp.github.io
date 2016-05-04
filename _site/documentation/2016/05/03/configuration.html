@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Using Log4j</title>
+    <title>Configuring Write Forward</title>
 
     <!-- Mobile tags -->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=device-width, height=device-height">
@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <!-- HTML Metadata -->
-    <meta name="description" content="Using Log4j">
+    <meta name="description" content="Configuring Write Forward">
     <meta name="keywords" content="">
 
     <meta name='robots' content='index,follow'>
@@ -22,27 +22,27 @@
     <meta name='author' content='Matthew Prichard <green.matt@comcast.net>'>
 
     <!-- Permalink location of the page (full https://www.example.com format) -->
-    <link rel="canonical" href="http://prichmp.github.io/Write-Forward/documentation/2016/05/02/log4j.html">
+    <link rel="canonical" href="http://prichmp.github.io/Write-Forward/documentation/2016/05/03/configuration.html">
 
     <!-- Atom/RSS feeds -->
     <link rel="alternate" type="application/rss+xml" title="Write Forward" href="http://prichmp.github.io/Write-Forward/feed.xml">
 
     <!-- Schema.org micro data -->
-    <meta itemprop="name" content="Using Log4j">
-    <meta name="description" content="Using Log4j">
+    <meta itemprop="name" content="Configuring Write Forward">
+    <meta name="description" content="Configuring Write Forward">
     <meta itemprop="image" content="images/icons/favicon-194x194.png">
 
     <!-- Facebook open graph -->
     <meta property="og:url" content="/Write-Forward">
-    <meta property="og:title" content="Using Log4j">
+    <meta property="og:title" content="Configuring Write Forward">
     <meta property="og:image" content="images/icons/favicon-194x194.png">
-    <meta property="og:site_name" content="Using Log4j">
-    <meta property="og:description" content="Using Log4j">
+    <meta property="og:site_name" content="Configuring Write Forward">
+    <meta property="og:description" content="Configuring Write Forward">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Using Log4j">
-    <meta name="twitter:description" content="Using Log4j">
+    <meta name="twitter:title" content="Configuring Write Forward">
+    <meta name="twitter:description" content="Configuring Write Forward">
     <meta name="twitter:image" content="images/icons/favicon-194x194.png">
 
     <!-- Icons -->
@@ -148,44 +148,89 @@
 
                         <div class="column column-80">
 
-                            <h1 id="using-log4j">Using Log4j</h1>
+                            <h1 id="configuring-write-forward">Configuring Write Forward</h1>
 
-<p><a href="http://logging.apache.org/log4j/2.x/">Log4j</a> is a popular logging framework. Write Forward only supports Log4j 2.x, not the legacy Log4j 1.x.</p>
+<p>There are three methods that apply configuration to Write Forward:
+ - A YAML file
+ - System Properties
+ - Programmatic configuration</p>
 
-<h2 id="project-setup">Project Setup</h2>
+<h2 id="system-properties">System Properties</h2>
 
-<p>Add the following dependencies to your Maven POM. Check with the <a href="http://search.maven.org/">Central Maven Repository</a> to determine the current version for Log4j. Check the <a href="/Write-Forward/download.html">download page</a> for the current Write Forward version.</p>
+<p>Currently Write Forward honors two system properties:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;dependency&gt;
-  &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
-  &lt;artifactId&gt;log4j-api&lt;/artifactId&gt;
-  &lt;version&gt;2.5&lt;/version&gt;
-&lt;/dependency&gt;
+<ul>
+  <li><code class="highlighter-rouge">writeforward.configuration</code></li>
+  <li>Sets the location of the configuration file. Write Forward will first attempt to load the file on the classpath using <code class="highlighter-rouge">.getResourceAsStream(configLocation)</code>, and if that fails Write Forward will load it as a file using <code class="highlighter-rouge">new File(configLocation)</code>.</li>
+  <li>Type: String/Filepath</li>
+  <li><code class="highlighter-rouge">writeforward.configuration.isslow</code></li>
+  <li>Sets if Write Forward should perform the slow reflection operations: get stacktrace, find file/class/method/line the log was call from.</li>
+  <li>Type: boolean (true/false)</li>
+</ul>
 
-&lt;dependency&gt;
-  &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
-  &lt;artifactId&gt;log4j-core&lt;/artifactId&gt;
-  &lt;version&gt;2.5&lt;/version&gt;
-&lt;/dependency&gt;
+<p>You can run your project with command line arguments. For example: <code class="highlighter-rouge">java -Dwriteforward.configuration="C:\Users\Me\MyProject\loggerconfig.yaml" -Dwriteforward.configuration.isslow="true" -jar myApplication.jar</code></p>
 
-&lt;dependency&gt;
-   &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
-   &lt;artifactId&gt;log4j-slf4j-impl&lt;/artifactId&gt;
-   &lt;version&gt;2.5&lt;/version&gt;
-&lt;/dependency&gt;
+<h2 id="yaml-config-file">YAML Config File</h2>
 
-&lt;dependency&gt;
-  &lt;groupId&gt;org.writeforward&lt;/groupId&gt;
-  &lt;artifactId&gt;logger&lt;/artifactId&gt;
-  &lt;version&gt;${write-forward-version}&lt;/version&gt;
-&lt;/dependency&gt;
+<p>Write Forward Configuration Files are written in YAML.
+<strong>Do not put tabs in YAML files!</strong> YAML does not like tabs in YAML files. Use spaces to indent your YAML files instead.</p>
+
+<p>Write Forward checks the <code class="highlighter-rouge">writeforward.configuration</code> system property first for the location of the configuration file. If <code class="highlighter-rouge">writeforward.configuration</code> is not set or the configuration file is not where it is supposed to be, the Write Forward loads <code class="highlighter-rouge">write-forward-config.yaml</code> by using the class loader. It is recommended to put this configuration file in <code class="highlighter-rouge">/src/main/resources</code> in your project.</p>
+
+<p>The structure of a configuration file is as follows, noting what is requires and what is optional:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>writeforward: #REQUIRED: Root of the configuration. In theory other yaml content could be in here as well.
+         isslow: true #OPTIONAL: If true performs slow reflection operations
+         numberofstackframes: 5 #OPTIONAL: The number of stack frames to add to the message. Default 50..
+         outputs: #REQUIRED sets what logging framework to log to.
+              - name: slf4j #REQUIRED: Logging framework to use.
+                format: |+ #REQUIRED: Formats the message using Pebble
+                    ===================================================================================================================
+                    [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
+
+                    {{ message }}
+
+                    {% if values is not empty %}
+                    {% for value in values %}
+                    {{ value.key }} = {{ value.value }}
+
+                    {% endfor %}
+                    {% endif %}
 </code></pre>
 </div>
 
-<h2 id="configuring-write-forward">Configuring Write Forward</h2>
-<p>Use SLF4J to output to Log4j2. To configure Write Forward the recommended way is to put a configuration file in the  <code class="highlighter-rouge">/src/main/resources/</code> folder in your Java, Scala, or Kotlin project.</p>
+<p>Outputs in the configuration file are a list. Each list entry outputs each log message to its own underlying frameworks.</p>
 
-<p>Here is an example <code class="highlighter-rouge">/src/main/resources/write-forward-config.yaml</code> file for Log4j2.</p>
+<p>Valid <code class="highlighter-rouge">name</code> for each <code class="highlighter-rouge">output</code> includes:
+ - <code class="highlighter-rouge">slf4j</code> : Which writes out to slf4j
+ - <code class="highlighter-rouge">javalogging</code>: Which writes out to java.util.logging
+ - <code class="highlighter-rouge">console</code>: Which writes out to system.out</p>
+
+<p>The <code class="highlighter-rouge">format</code> in each output only controls what message string is put in to the message field of each logger. Write Forward will attempt to input exceptions and markers, into the underlying framework nativly. For example, Write Forward will call <code class="highlighter-rouge">logger.error(message.getMarker().toSlf4jMarker(), message.getMessage(), message.getException());</code> in SLF4j.</p>
+
+<h2 id="programmatic-configuration">Programmatic configuration</h2>
+
+<p>Write Forward also has a programmatic API for setting the configuration.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>import org.writeforward.logger.Configurator;
+
+...
+
+Configurator.build() //Starts a new programmatic configuration.
+.withOutput(new StandardOutput(new DefaultMessageFormatter())) //Sets a Output to write to.
+.commit(); // Commits the new configuration to be used.
+</code></pre>
+</div>
+
+<p>See the JavaDocs for <code class="highlighter-rouge">org.writeforward.logger.MessageBuilder</code> for the full programatic API.</p>
+
+<h2 id="what-if-a-configuration-is-not-found">What if a configuration is not found?</h2>
+
+<p>In the event a configuration is not found by the first time the logger is called, Write Forward attempts to configure itself.</p>
+
+<p>If a configuration file is not found on the classpath, Write forward will check to see what logging frameworks are on the classpath, and load the default configuration for that framework is. It checks to see if Logback or Log4j is on the classpath, and if one is, it loads the default Logback or Log4j configuration file.</p>
+
+<h3 id="default-log4j-configuration">Default Log4j configuration:</h3>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>writeforward:
          isslow: true
@@ -204,34 +249,28 @@
 </code></pre>
 </div>
 
-<h2 id="configuring-log4j">Configuring Log4j</h2>
-<p>To configure Log4j, consult the <a href="https://logging.apache.org/log4j/2.0/manual/index.html">Log4j documentation</a>.</p>
+<h2 id="default-logback-configuration">Default Logback configuration</h2>
 
-<p>The Log4j configuration file needs to be in the classpath somewhere. To use the following sample configuration create a new file with the name and location <code class="highlighter-rouge">/src/main/resources/log4j2.xml</code> and copy the below XML content into it. Log4j should automatically pick up the file.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>writeforward: #Root of the configuration
+         isslow: true #If true performs slow reflection operations
+         numberofstackframes: 5 #Determines the max number of stack frames put into the message's stack trace.
+         outputs:
+              - name: slf4j #Uses the default SLF4J outputter.
+                format: |+ #Formats the message using Pebble
+                    ===================================================================================================================
+                    [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="nt">&lt;Configuration</span> <span class="na">status=</span><span class="s">"WARN"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;Appenders&gt;</span>
-    <span class="nt">&lt;Console</span> <span class="na">name=</span><span class="s">"Console"</span> <span class="na">target=</span><span class="s">"SYSTEM_OUT"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;PatternLayout</span> <span class="na">pattern=</span><span class="s">"%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/Console&gt;</span>
-    <span class="nt">&lt;Console</span> <span class="na">name=</span><span class="s">"WriteForward"</span> <span class="na">target=</span><span class="s">"SYSTEM_OUT"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;PatternLayout</span> <span class="na">pattern=</span><span class="s">"%msg%n"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/Console&gt;</span>
-  <span class="nt">&lt;/Appenders&gt;</span>
-  <span class="nt">&lt;Loggers&gt;</span>
-    <span class="nt">&lt;Logger</span> <span class="na">name=</span><span class="s">"org.writeforward.logger.writers.Slf4jOutput"</span> <span class="na">level=</span><span class="s">"trace"</span> <span class="na">additivity=</span><span class="s">"false"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;AppenderRef</span> <span class="na">ref=</span><span class="s">"WriteForward"</span> <span class="na">level=</span><span class="s">"trace"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/Logger&gt;</span>
-    <span class="nt">&lt;Root</span> <span class="na">level=</span><span class="s">"warn"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;AppenderRef</span> <span class="na">ref=</span><span class="s">"Console"</span> <span class="na">level=</span><span class="s">"warn"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/Root&gt;</span>
-  <span class="nt">&lt;/Loggers&gt;</span>
-<span class="nt">&lt;/Configuration&gt;</span>
+                    {{ message }}
+
+                    {% if values is not empty %}
+                    {% for value in values %}
+                    {{ value.key }} = {{ value.value }}
+
+                    {% endfor %}
+                    {% endif %}
 </code></pre>
 </div>
 
-<p>The logger with the name org.writeforward.logger.writers.Slf4jOutput represents the output from WriteForward, and its’  is written plainly out with the <code class="highlighter-rouge">%msg%n</code> format. Everything else is written out with the full pattern.</p>
 
 
                         </div><!-- .column -->

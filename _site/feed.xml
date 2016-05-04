@@ -6,9 +6,144 @@
 </description>
     <link>http://prichmp.github.io/Write-Forward/</link>
     <atom:link href="http://prichmp.github.io/Write-Forward/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 02 May 2016 21:30:13 -0600</pubDate>
-    <lastBuildDate>Mon, 02 May 2016 21:30:13 -0600</lastBuildDate>
+    <pubDate>Tue, 03 May 2016 22:15:58 -0600</pubDate>
+    <lastBuildDate>Tue, 03 May 2016 22:15:58 -0600</lastBuildDate>
     <generator>Jekyll v3.1.3</generator>
+    
+      <item>
+        <title>Configuring Write Forward</title>
+        <description>&lt;h1 id=&quot;configuring-write-forward&quot;&gt;Configuring Write Forward&lt;/h1&gt;
+
+&lt;p&gt;There are three methods that apply configuration to Write Forward:
+ - A YAML file
+ - System Properties
+ - Programmatic configuration&lt;/p&gt;
+
+&lt;h2 id=&quot;system-properties&quot;&gt;System Properties&lt;/h2&gt;
+
+&lt;p&gt;Currently Write Forward honors two system properties:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;writeforward.configuration&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Sets the location of the configuration file. Write Forward will first attempt to load the file on the classpath using &lt;code class=&quot;highlighter-rouge&quot;&gt;.getResourceAsStream(configLocation)&lt;/code&gt;, and if that fails Write Forward will load it as a file using &lt;code class=&quot;highlighter-rouge&quot;&gt;new File(configLocation)&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Type: String/Filepath&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;writeforward.configuration.isslow&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Sets if Write Forward should perform the slow reflection operations: get stacktrace, find file/class/method/line the log was call from.&lt;/li&gt;
+  &lt;li&gt;Type: boolean (true/false)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can run your project with command line arguments. For example: &lt;code class=&quot;highlighter-rouge&quot;&gt;java -Dwriteforward.configuration=&quot;C:\Users\Me\MyProject\loggerconfig.yaml&quot; -Dwriteforward.configuration.isslow=&quot;true&quot; -jar myApplication.jar&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;yaml-config-file&quot;&gt;YAML Config File&lt;/h2&gt;
+
+&lt;p&gt;Write Forward Configuration Files are written in YAML.
+&lt;strong&gt;Do not put tabs in YAML files!&lt;/strong&gt; YAML does not like tabs in YAML files. Use spaces to indent your YAML files instead.&lt;/p&gt;
+
+&lt;p&gt;Write Forward checks the &lt;code class=&quot;highlighter-rouge&quot;&gt;writeforward.configuration&lt;/code&gt; system property first for the location of the configuration file. If &lt;code class=&quot;highlighter-rouge&quot;&gt;writeforward.configuration&lt;/code&gt; is not set or the configuration file is not where it is supposed to be, the Write Forward loads &lt;code class=&quot;highlighter-rouge&quot;&gt;write-forward-config.yaml&lt;/code&gt; by using the class loader. It is recommended to put this configuration file in &lt;code class=&quot;highlighter-rouge&quot;&gt;/src/main/resources&lt;/code&gt; in your project.&lt;/p&gt;
+
+&lt;p&gt;The structure of a configuration file is as follows, noting what is requires and what is optional:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;writeforward: #REQUIRED: Root of the configuration. In theory other yaml content could be in here as well.
+         isslow: true #OPTIONAL: If true performs slow reflection operations
+         numberofstackframes: 5 #OPTIONAL: The number of stack frames to add to the message. Default 50..
+         outputs: #REQUIRED sets what logging framework to log to.
+              - name: slf4j #REQUIRED: Logging framework to use.
+                format: |+ #REQUIRED: Formats the message using Pebble
+                    ===================================================================================================================
+                    [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
+
+                    {{ message }}
+
+                    {% if values is not empty %}
+                    {% for value in values %}
+                    {{ value.key }} = {{ value.value }}
+
+                    {% endfor %}
+                    {% endif %}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Outputs in the configuration file are a list. Each list entry outputs each log message to its own underlying frameworks.&lt;/p&gt;
+
+&lt;p&gt;Valid &lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt; for each &lt;code class=&quot;highlighter-rouge&quot;&gt;output&lt;/code&gt; includes:
+ - &lt;code class=&quot;highlighter-rouge&quot;&gt;slf4j&lt;/code&gt; : Which writes out to slf4j
+ - &lt;code class=&quot;highlighter-rouge&quot;&gt;javalogging&lt;/code&gt;: Which writes out to java.util.logging
+ - &lt;code class=&quot;highlighter-rouge&quot;&gt;console&lt;/code&gt;: Which writes out to system.out&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;format&lt;/code&gt; in each output only controls what message string is put in to the message field of each logger. Write Forward will attempt to input exceptions and markers, into the underlying framework nativly. For example, Write Forward will call &lt;code class=&quot;highlighter-rouge&quot;&gt;logger.error(message.getMarker().toSlf4jMarker(), message.getMessage(), message.getException());&lt;/code&gt; in SLF4j.&lt;/p&gt;
+
+&lt;h2 id=&quot;programmatic-configuration&quot;&gt;Programmatic configuration&lt;/h2&gt;
+
+&lt;p&gt;Write Forward also has a programmatic API for setting the configuration.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import org.writeforward.logger.Configurator;
+
+...
+
+Configurator.build() //Starts a new programmatic configuration.
+.withOutput(new StandardOutput(new DefaultMessageFormatter())) //Sets a Output to write to.
+.commit(); // Commits the new configuration to be used.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;See the JavaDocs for &lt;code class=&quot;highlighter-rouge&quot;&gt;org.writeforward.logger.MessageBuilder&lt;/code&gt; for the full programatic API.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-if-a-configuration-is-not-found&quot;&gt;What if a configuration is not found?&lt;/h2&gt;
+
+&lt;p&gt;In the event a configuration is not found by the first time the logger is called, Write Forward attempts to configure itself.&lt;/p&gt;
+
+&lt;p&gt;If a configuration file is not found on the classpath, Write forward will check to see what logging frameworks are on the classpath, and load the default configuration for that framework is. It checks to see if Logback or Log4j is on the classpath, and if one is, it loads the default Logback or Log4j configuration file.&lt;/p&gt;
+
+&lt;h3 id=&quot;default-log4j-configuration&quot;&gt;Default Log4j configuration:&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;writeforward:
+         isslow: true
+         numberofstackframes: 5
+         outputs:
+              - name: log4j
+                format: |-
+                    {{ timestamp }} [{{ thread }}] {{ level }}{% if marker is not empty %} {{ marker }}{% endif %}{% if class is not empty %} {{ class }}:{{ line }}{% endif %} - {{ message }}
+                    {% if values is not empty %}
+
+                    {% for value in values %}
+                    {{ value.key }} = {{ value.value }}
+
+                    {% endfor %}
+                    {% endif %}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;default-logback-configuration&quot;&gt;Default Logback configuration&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;writeforward: #Root of the configuration
+         isslow: true #If true performs slow reflection operations
+         numberofstackframes: 5 #Determines the max number of stack frames put into the message&#39;s stack trace.
+         outputs:
+              - name: slf4j #Uses the default SLF4J outputter.
+                format: |+ #Formats the message using Pebble
+                    ===================================================================================================================
+                    [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
+
+                    {{ message }}
+
+                    {% if values is not empty %}
+                    {% for value in values %}
+                    {{ value.key }} = {{ value.value }}
+
+                    {% endfor %}
+                    {% endif %}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+</description>
+        <pubDate>Tue, 03 May 2016 00:00:00 -0600</pubDate>
+        <link>http://prichmp.github.io/Write-Forward/documentation/2016/05/03/configuration.html</link>
+        <guid isPermaLink="true">http://prichmp.github.io/Write-Forward/documentation/2016/05/03/configuration.html</guid>
+        
+        
+        <category>documentation</category>
+        
+      </item>
     
       <item>
         <title>Using SLF4J</title>
@@ -289,7 +424,7 @@
         <title>Using Log4j</title>
         <description>&lt;h1 id=&quot;using-log4j&quot;&gt;Using Log4j&lt;/h1&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://logging.apache.org/log4j/2.x/&quot;&gt;Log4j&lt;/a&gt; is a popular logging framework. Write Forward only supports Log4j 2.x, bot the legacy Log4j 1.x.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://logging.apache.org/log4j/2.x/&quot;&gt;Log4j&lt;/a&gt; is a popular logging framework. Write Forward only supports Log4j 2.x, not the legacy Log4j 1.x.&lt;/p&gt;
 
 &lt;h2 id=&quot;project-setup&quot;&gt;Project Setup&lt;/h2&gt;
 

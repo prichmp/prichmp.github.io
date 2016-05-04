@@ -6,7 +6,7 @@ category: documentation
 
 # Using Log4j
 
-[Log4j](http://logging.apache.org/log4j/2.x/) is a popular logging framework. Write Forward only supports Log4j 2.x, bot the legacy Log4j 1.x.
+[Log4j](http://logging.apache.org/log4j/2.x/) is a popular logging framework. Write Forward only supports Log4j 2.x, not the legacy Log4j 1.x.
 
 ## Project Setup
 
