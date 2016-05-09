@@ -15,31 +15,22 @@ Add Write Forward to your project. Check the [download page]( {{ "/download.html
 ## Configuring Write Forward
 To configure Write Forward the recommended way is to put a configuration file in the  `/src/main/resources/` folder in your Java, Scala, or Kotlin project.
 
-Here is an example `/src/main/resources/write-forward-config.yaml` file for Java Logging.
+Here is an example `/src/main/resources/write-forward-config.xml` file for Java Logging.
 
 {% raw %}
 
-      writeforward:
-               isslow: true
-               numberofstackframes: 2
-               outputs:
-                    - name: javalogging
-                      format: |+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <writeforward slow="true" stackframes="50">
+    	<outputs>
+    		<output name="javalogging">
+    <format>{{#marker}}{{marker}}{{/marker}} {{ message }}
+      {{#values}}
+      {{key}} = {{value}}
+      {{/values}}</format>
+    		</output>
+    	</outputs>
+    </writeforward>
 
-                          [{{ level }}] {{ marker }} {{ timestamp }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
-
-                          {{ message }}
-
-                          {% if exception is not empty %}
-                          {{ exception }}
-
-                          {% endif %}
-                          {% if values is not empty %}
-                          {% for value in values %}
-                          {{ value.key }} = {{ value.value }}
-
-                          {% endfor %}
-                          {% endif %}
 {% endraw %}
 
 

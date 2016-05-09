@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Configuring Write Forward</title>
+    <title>Configuring Write Forward | Write Forward</title>
 
     <!-- Mobile tags -->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=device-width, height=device-height">
@@ -13,11 +13,11 @@
 
     <!-- HTML Metadata -->
     <meta name="description" content="Configuring Write Forward">
-    <meta name="keywords" content="">
+    <meta name="keywords" content="Write Forward,WriteForward,java,logging,SLF4J,Logback,fluent,framework">
 
     <meta name='robots' content='index,follow'>
     <meta name='revisit-after' content='7 days'>
-    <meta name='revised' content='2016-05-03 22:39:33 -0600'>
+    <meta name='revised' content='2016-05-08 21:34:37 -0600'>
 
     <meta name='author' content='Matthew Prichard <green.matt@comcast.net>'>
 
@@ -124,7 +124,7 @@
                                 
                               
                                 
-                                <li><a class="page-link" href="/Write-Forward/documentation/2016/05/02/pebble.html">Pebble Formatter</a></li>
+                                <li><a class="page-link" href="/Write-Forward/documentation/2016/05/02/mustashe.html">JMustache Formatter</a></li>
                                 
                               
                                 
@@ -172,37 +172,41 @@
 
 <h2 id="yaml-config-file">YAML Config File</h2>
 
-<p>Write Forward Configuration Files are written in YAML.
-<strong>Do not put tabs in YAML files!</strong> YAML does not like tabs in YAML files. Use spaces to indent your YAML files instead.</p>
+<p>Write Forward Configuration Files are written in XML.</p>
 
-<p>Write Forward checks the <code class="highlighter-rouge">writeforward.configuration</code> system property first for the location of the configuration file. If <code class="highlighter-rouge">writeforward.configuration</code> is not set or the configuration file is not where it is supposed to be, the Write Forward loads <code class="highlighter-rouge">write-forward-config.yaml</code> by using the class loader. It is recommended to put this configuration file in <code class="highlighter-rouge">/src/main/resources</code> in your project.</p>
+<p>Write Forward checks the <code class="highlighter-rouge">writeforward.configuration</code> system property first for the location of the configuration file. If <code class="highlighter-rouge">writeforward.configuration</code> is not set or the configuration file is not where it is supposed to be, the Write Forward loads <code class="highlighter-rouge">write-forward-config.xml</code> by using the class loader. It is recommended to put this configuration file in <code class="highlighter-rouge">/src/main/resources</code> in your project.</p>
 
 <p>The structure of a configuration file is as follows, noting what is requires and what is optional:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>writeforward: #REQUIRED: Root of the configuration. In theory other yaml content could be in here as well.
-         isslow: true #OPTIONAL: If true performs slow reflection operations
-         numberofstackframes: 5 #OPTIONAL: The number of stack frames to add to the message. Default 50..
-         outputs: #REQUIRED sets what logging framework to log to.
-              - name: slf4j #REQUIRED: Logging framework to use.
-                format: |+ #REQUIRED: Formats the message using Pebble
-                    ===================================================================================================================
-                    [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;writeforward</span> <span class="na">slow=</span><span class="s">"true"</span> <span class="na">stackframes=</span><span class="s">"50"</span><span class="nt">&gt;</span><span class="c">&lt;!-- REQUIRED: Root of the configuration. In theory other content could be in here as well.
+slow: OPTIONAL: If true performs slow reflection operation
+stackframes: OPTIONAL: The number of stack frames to add to the message. Default 50.
+--&gt;</span>
+	<span class="nt">&lt;outputs&gt;</span><span class="c">&lt;!-- REQUIRED sets what logging framework to log to. --&gt;</span>
+		<span class="nt">&lt;output</span> <span class="na">name=</span><span class="s">"console"</span><span class="nt">&gt;</span><span class="c">&lt;!-- REQUIRED: Logging framework to use --&gt;</span>
+			<span class="nt">&lt;format&gt;</span><span class="c">&lt;!-- REQUIRED: Formats the message --&gt;</span>
 
-                    {{ message }}
-
-                    {% if values is not empty %}
-                    {% for value in values %}
-                    {{ value.key }} = {{ value.value }}
-
-                    {% endfor %}
-                    {% endif %}
+{{ timestamp }} [{{ thread }}] {{level}} {{#marker}}{{marker}} {{/marker}}{{#class}}{{ class }}.{{method}}:{{ line }}{{/class}}
+	{{ message }}
+	{{#values}}
+	{{key}} = {{value}}
+	{{/values}}
+	{{#exception}}
+	{{exception}}
+	{{/exception}}
+			<span class="nt">&lt;/format&gt;</span>
+		<span class="nt">&lt;/output&gt;</span>
+	<span class="nt">&lt;/outputs&gt;</span>
+<span class="nt">&lt;/writeforward&gt;</span>
 </code></pre>
 </div>
 
 <p>Outputs in the configuration file are a list. Each list entry outputs each log message to its own underlying frameworks.</p>
 
 <p>Valid <code class="highlighter-rouge">name</code> for each <code class="highlighter-rouge">output</code> includes:
- - <code class="highlighter-rouge">slf4j</code> : Which writes out to slf4j
+ - <code class="highlighter-rouge">slf4j</code>: Which writes out to slf4j
+ - <code class="highlighter-rouge">log4j</code>: Which writes out to Log4j natively.
  - <code class="highlighter-rouge">javalogging</code>: Which writes out to java.util.logging
  - <code class="highlighter-rouge">console</code>: Which writes out to system.out</p>
 
@@ -232,42 +236,42 @@ Configurator.build() //Starts a new programmatic configuration.
 
 <h3 id="default-log4j-configuration">Default Log4j configuration:</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>writeforward:
-         isslow: true
-         numberofstackframes: 5
-         outputs:
-              - name: log4j
-                format: |-
-                    {{ timestamp }} [{{ thread }}] {{ level }}{% if marker is not empty %} {{ marker }}{% endif %}{% if class is not empty %} {{ class }}:{{ line }}{% endif %} - {{ message }}
-                    {% if values is not empty %}
-
-                    {% for value in values %}
-                    {{ value.key }} = {{ value.value }}
-
-                    {% endfor %}
-                    {% endif %}
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;writeforward</span> <span class="na">slow=</span><span class="s">"true"</span> <span class="na">stackframes=</span><span class="s">"50"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;outputs&gt;</span>
+		<span class="nt">&lt;output</span> <span class="na">name=</span><span class="s">"log4j"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;format&gt;</span>
+{{ timestamp }} [{{ thread }}] {{ level }}{{#marker}}{{marker}}{{/marker}}{{#class}} {{ class }}.{{method}}:{{ line }}{{/class}} - {{ message }}
+	{{#values}}
+	{{key}} = {{value}}
+	{{/values}}<span class="nt">&lt;/format&gt;</span>
+		<span class="nt">&lt;/output&gt;</span>
+	<span class="nt">&lt;/outputs&gt;</span>
+<span class="nt">&lt;/writeforward&gt;</span>
 </code></pre>
 </div>
 
 <h3 id="default-logback-configuration">Default Logback configuration</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>writeforward: #Root of the configuration
-         isslow: true #If true performs slow reflection operations
-         numberofstackframes: 5 #Determines the max number of stack frames put into the message's stack trace.
-         outputs:
-              - name: slf4j #Uses the default SLF4J outputter.
-                format: |+ #Formats the message using Pebble
-                    ===================================================================================================================
-                    [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
-
-                    {{ message }}
-
-                    {% if values is not empty %}
-                    {% for value in values %}
-                    {{ value.key }} = {{ value.value }}
-
-                    {% endfor %}
-                    {% endif %}
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;writeforward</span> <span class="na">slow=</span><span class="s">"true"</span> <span class="na">stackframes=</span><span class="s">"50"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;outputs&gt;</span>
+		<span class="nt">&lt;output</span> <span class="na">name=</span><span class="s">"console"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;format&gt;</span>
+{{ timestamp }} [{{ thread }}] {{ level }}{{#marker}} {{marker}}{{/marker}}{{#class}} {{ class }}.{{method}}:{{ line }}{{/class}}
+	{{ message }}
+	{{#values}}
+	{{key}} = {{value}}
+	{{/values}}
+	{{#exception}}
+	{{exception}}
+		{{#exception.stacktrace}}
+		{{this}}
+		{{/exception.stacktrace}}
+	{{/exception}}<span class="nt">&lt;/format&gt;</span>
+		<span class="nt">&lt;/output&gt;</span>
+	<span class="nt">&lt;/outputs&gt;</span>
+<span class="nt">&lt;/writeforward&gt;</span>
 </code></pre>
 </div>
 

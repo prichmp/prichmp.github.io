@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Using Log4j</title>
+    <title>Using Log4j | Write Forward</title>
 
     <!-- Mobile tags -->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=device-width, height=device-height">
@@ -13,11 +13,11 @@
 
     <!-- HTML Metadata -->
     <meta name="description" content="Using Log4j">
-    <meta name="keywords" content="">
+    <meta name="keywords" content="Write Forward,WriteForward,java,logging,SLF4J,Logback,fluent,framework">
 
     <meta name='robots' content='index,follow'>
     <meta name='revisit-after' content='7 days'>
-    <meta name='revised' content='2016-05-03 22:39:33 -0600'>
+    <meta name='revised' content='2016-05-08 21:34:37 -0600'>
 
     <meta name='author' content='Matthew Prichard <green.matt@comcast.net>'>
 
@@ -124,7 +124,7 @@
                                 
                               
                                 
-                                <li><a class="page-link" href="/Write-Forward/documentation/2016/05/02/pebble.html">Pebble Formatter</a></li>
+                                <li><a class="page-link" href="/Write-Forward/documentation/2016/05/02/mustashe.html">JMustache Formatter</a></li>
                                 
                               
                                 
@@ -185,22 +185,21 @@
 <h2 id="configuring-write-forward">Configuring Write Forward</h2>
 <p>Use SLF4J to output to Log4j2. To configure Write Forward the recommended way is to put a configuration file in the  <code class="highlighter-rouge">/src/main/resources/</code> folder in your Java, Scala, or Kotlin project.</p>
 
-<p>Here is an example <code class="highlighter-rouge">/src/main/resources/write-forward-config.yaml</code> file for Log4j2.</p>
+<p>Here is an example <code class="highlighter-rouge">/src/main/resources/write-forward-config.xml</code> file for Log4j2.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>writeforward:
-         isslow: true
-         numberofstackframes: 5
-         outputs:
-              - name: log4j
-                format: |-
-                    {{ timestamp }} [{{ thread }}] {{ level }}{% if marker is not empty %} {{ marker }}{% endif %}{% if class is not empty %} {{ class }}:{{ line }}{% endif %} - {{ message }}
-                    {% if values is not empty %}
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;writeforward</span> <span class="na">slow=</span><span class="s">"true"</span> <span class="na">stackframes=</span><span class="s">"50"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;outputs&gt;</span>
+		<span class="nt">&lt;output</span> <span class="na">name=</span><span class="s">"log4j"</span><span class="nt">&gt;</span>
 
-                    {% for value in values %}
-                    {{ value.key }} = {{ value.value }}
+<span class="nt">&lt;format&gt;</span>{{ timestamp }} [{{ thread }}] {{ level }}{{#marker}}{{marker}}{{/marker}}{{#class}} {{ class }}.{{method}}:{{ line }}{{/class}} - {{ message }}
+  {{#values}}
+  {{key}} = {{value}}
+  {{/values}}<span class="nt">&lt;/format&gt;</span>
 
-                    {% endfor %}
-                    {% endif %}
+		<span class="nt">&lt;/output&gt;</span>
+	<span class="nt">&lt;/outputs&gt;</span>
+<span class="nt">&lt;/writeforward&gt;</span>
 </code></pre>
 </div>
 
@@ -220,7 +219,7 @@
     <span class="nt">&lt;/Console&gt;</span>
   <span class="nt">&lt;/Appenders&gt;</span>
   <span class="nt">&lt;Loggers&gt;</span>
-    <span class="nt">&lt;Logger</span> <span class="na">name=</span><span class="s">"org.writeforward.logger.writers.Slf4jOutput"</span> <span class="na">level=</span><span class="s">"trace"</span> <span class="na">additivity=</span><span class="s">"false"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;Logger</span> <span class="na">name=</span><span class="s">"org.writeforward.logger.writers.Log4jOutput"</span> <span class="na">level=</span><span class="s">"trace"</span> <span class="na">additivity=</span><span class="s">"false"</span><span class="nt">&gt;</span>
       <span class="nt">&lt;AppenderRef</span> <span class="na">ref=</span><span class="s">"WriteForward"</span> <span class="na">level=</span><span class="s">"trace"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/Logger&gt;</span>
     <span class="nt">&lt;Root</span> <span class="na">level=</span><span class="s">"warn"</span><span class="nt">&gt;</span>
@@ -231,7 +230,7 @@
 </code></pre>
 </div>
 
-<p>The logger with the name org.writeforward.logger.writers.Slf4jOutput represents the output from WriteForward, and its’  is written plainly out with the <code class="highlighter-rouge">%msg%n</code> format. Everything else is written out with the full pattern.</p>
+<p>The logger with the name  <code class="highlighter-rouge">org.writeforward.logger.writers.Log4jOutput</code> represents the default logger from WriteForward, and it is written plainly out with the <code class="highlighter-rouge">%msg%n</code> format. Everything else is written out with the Log4j default pattern.</p>
 
 
                         </div><!-- .column -->

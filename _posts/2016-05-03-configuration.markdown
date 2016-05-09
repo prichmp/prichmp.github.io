@@ -26,37 +26,43 @@ You can run your project with command line arguments. For example: `java -Dwrite
 
 ## YAML Config File
 
-Write Forward Configuration Files are written in YAML.
-**Do not put tabs in YAML files!** YAML does not like tabs in YAML files. Use spaces to indent your YAML files instead.
+Write Forward Configuration Files are written in XML.
 
-Write Forward checks the `writeforward.configuration` system property first for the location of the configuration file. If `writeforward.configuration` is not set or the configuration file is not where it is supposed to be, the Write Forward loads `write-forward-config.yaml` by using the class loader. It is recommended to put this configuration file in `/src/main/resources` in your project.
+
+Write Forward checks the `writeforward.configuration` system property first for the location of the configuration file. If `writeforward.configuration` is not set or the configuration file is not where it is supposed to be, the Write Forward loads `write-forward-config.xml` by using the class loader. It is recommended to put this configuration file in `/src/main/resources` in your project.
 
 The structure of a configuration file is as follows, noting what is requires and what is optional:
 {% raw %}
 
-    writeforward: #REQUIRED: Root of the configuration. In theory other yaml content could be in here as well.
-             isslow: true #OPTIONAL: If true performs slow reflection operations
-             numberofstackframes: 5 #OPTIONAL: The number of stack frames to add to the message. Default 50..
-             outputs: #REQUIRED sets what logging framework to log to.
-                  - name: slf4j #REQUIRED: Logging framework to use.
-                    format: |+ #REQUIRED: Formats the message using Pebble
-                        ===================================================================================================================
-                        [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
+    <?xml version="1.0" encoding="UTF-8"?>
+    <writeforward slow="true" stackframes="50"><!-- REQUIRED: Root of the configuration. In theory other content could be in here as well.
+    slow: OPTIONAL: If true performs slow reflection operation
+    stackframes: OPTIONAL: The number of stack frames to add to the message. Default 50.
+    -->
+    	<outputs><!-- REQUIRED sets what logging framework to log to. -->
+    		<output name="console"><!-- REQUIRED: Logging framework to use -->
+    			<format><!-- REQUIRED: Formats the message -->
 
-                        {{ message }}
+    {{ timestamp }} [{{ thread }}] {{level}} {{#marker}}{{marker}} {{/marker}}{{#class}}{{ class }}.{{method}}:{{ line }}{{/class}}
+    	{{ message }}
+    	{{#values}}
+    	{{key}} = {{value}}
+    	{{/values}}
+    	{{#exception}}
+    	{{exception}}
+    	{{/exception}}
+    			</format>
+    		</output>
+    	</outputs>
+    </writeforward>
 
-                        {% if values is not empty %}
-                        {% for value in values %}
-                        {{ value.key }} = {{ value.value }}
-
-                        {% endfor %}
-                        {% endif %}
 {% endraw %}
 
 Outputs in the configuration file are a list. Each list entry outputs each log message to its own underlying frameworks.
 
 Valid `name` for each `output` includes:
- - `slf4j` : Which writes out to slf4j
+ - `slf4j`: Which writes out to slf4j
+ - `log4j`: Which writes out to Log4j natively.
  - `javalogging`: Which writes out to java.util.logging
  - `console`: Which writes out to system.out
 
@@ -85,40 +91,42 @@ If a configuration file is not found on the classpath, Write forward will check 
 ### Default Log4j configuration:
 {% raw %}
 
-    writeforward:
-             isslow: true
-             numberofstackframes: 5
-             outputs:
-                  - name: log4j
-                    format: |-
-                        {{ timestamp }} [{{ thread }}] {{ level }}{% if marker is not empty %} {{ marker }}{% endif %}{% if class is not empty %} {{ class }}:{{ line }}{% endif %} - {{ message }}
-                        {% if values is not empty %}
+    <?xml version="1.0" encoding="UTF-8"?>
+    <writeforward slow="true" stackframes="50">
+    	<outputs>
+    		<output name="log4j">
+    			<format>
+    {{ timestamp }} [{{ thread }}] {{ level }}{{#marker}}{{marker}}{{/marker}}{{#class}} {{ class }}.{{method}}:{{ line }}{{/class}} - {{ message }}
+    	{{#values}}
+    	{{key}} = {{value}}
+    	{{/values}}</format>
+    		</output>
+    	</outputs>
+    </writeforward>
 
-                        {% for value in values %}
-                        {{ value.key }} = {{ value.value }}
-
-                        {% endfor %}
-                        {% endif %}
 {% endraw %}
 
 ### Default Logback configuration
 {% raw %}
 
-    writeforward: #Root of the configuration
-             isslow: true #If true performs slow reflection operations
-             numberofstackframes: 5 #Determines the max number of stack frames put into the message's stack trace.
-             outputs:
-                  - name: slf4j #Uses the default SLF4J outputter.
-                    format: |+ #Formats the message using Pebble
-                        ===================================================================================================================
-                        [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
-
-                        {{ message }}
-
-                        {% if values is not empty %}
-                        {% for value in values %}
-                        {{ value.key }} = {{ value.value }}
-
-                        {% endfor %}
-                        {% endif %}
+    <?xml version="1.0" encoding="UTF-8"?>
+    <writeforward slow="true" stackframes="50">
+    	<outputs>
+    		<output name="console">
+    			<format>
+    {{ timestamp }} [{{ thread }}] {{ level }}{{#marker}} {{marker}}{{/marker}}{{#class}} {{ class }}.{{method}}:{{ line }}{{/class}}
+    	{{ message }}
+    	{{#values}}
+    	{{key}} = {{value}}
+    	{{/values}}
+    	{{#exception}}
+    	{{exception}}
+    		{{#exception.stacktrace}}
+    		{{this}}
+    		{{/exception.stacktrace}}
+    	{{/exception}}</format>
+    		</output>
+    	</outputs>
+    </writeforward>
+    
  {% endraw %}

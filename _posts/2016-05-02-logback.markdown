@@ -10,7 +10,7 @@ category: documentation
 
 ## Project Setup
 
-Add the following dependencies to your Maven POM. Check with The [Central Maven Repository](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22ch.qos.logback%22%20AND%20a%3A%22logback-classic%22) to determine the current version for Logback. Check the [download page]{ {{ "/download.html" | prepend: site.baseurl }} } for the current Write Forward version.
+Add the following dependencies to your Maven POM. Check with The [Central Maven Repository](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22ch.qos.logback%22%20AND%20a%3A%22logback-classic%22) to determine the current version for Logback. Check the [download page]( {{ "/download.html" | prepend: site.baseurl }} ) for the current Write Forward version.
 
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -28,26 +28,28 @@ Add the following dependencies to your Maven POM. Check with The [Central Maven 
 ## Configuring Write Forward
 Use SLF4J to output to Logback. To configure Write Forward the recommended way is to put a configuration file in the  `/src/main/resources/` folder in your Java, Scala, or Kotlin project.
 
-Here is an example `/src/main/resources/write-forward-config.yaml` file for Logback.
+Here is an example `/src/main/resources/write-forward-config.xml` file for Logback.
 
 {% raw %}
-    writeforward:
-             isslow: true
-             numberofstackframes: 5
-             outputs:
-                  - name: slf4j
-                    format: |+
-                        ===================================================================================================================
-                        [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
-
-                        {{ message }}
-
-                        {% if values is not empty %}
-                        {% for value in values %}
-                        {{ value.key }} = {{ value.value }}
-
-                        {% endfor %}
-                        {% endif %}
+    <?xml version="1.0" encoding="UTF-8"?>
+    <writeforward slow="true" stackframes="50">
+    	<outputs>
+    		<output name="console">
+    			<format>
+    {{ timestamp }} [{{ thread }}] {{ level }}{{#marker}} {{marker}}{{/marker}}{{#class}} {{ class }}.{{method}}:{{ line }}{{/class}}
+    	{{ message }}
+    	{{#values}}
+    	{{key}} = {{value}}
+    	{{/values}}
+    	{{#exception}}
+    	{{exception}}
+    		{{#exception.stacktrace}}
+    		{{this}}
+    		{{/exception.stacktrace}}
+    	{{/exception}}</format>
+    		</output>
+    	</outputs>
+    </writeforward>
 {% endraw %}
 
 
@@ -65,16 +67,20 @@ To use the following sample configuration create a new file with the name and lo
     		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
     		    <pattern>%msg</pattern>
     		</encoder>
-
     	</appender>
 
-    	<logger name="com.mkyong.web" level="debug"
-    		additivity="false">
+    	<appender name="LOGBACKDEFAULT" class="ch.qos.logback.core.ConsoleAppender">
+    		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+    		    <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    		</encoder>
+    	</appender>
+
+    	<logger name="org.writeforward.logger.writers.Slf4jOutput" level="trace">
     		<appender-ref ref="STDOUT" />
     	</logger>
 
-    	<root level="debug">
-    		<appender-ref ref="STDOUT" />
+    	<root level="warn">
+    		<appender-ref ref="LOGBACKDEFAULT" />
     	</root>
 
     </configuration>

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Using Logback</title>
+    <title>Using Logback | Write Forward</title>
 
     <!-- Mobile tags -->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=device-width, height=device-height">
@@ -13,11 +13,11 @@
 
     <!-- HTML Metadata -->
     <meta name="description" content="Using Logback">
-    <meta name="keywords" content="">
+    <meta name="keywords" content="Write Forward,WriteForward,java,logging,SLF4J,Logback,fluent,framework">
 
     <meta name='robots' content='index,follow'>
     <meta name='revisit-after' content='7 days'>
-    <meta name='revised' content='2016-05-03 22:39:33 -0600'>
+    <meta name='revised' content='2016-05-08 21:34:37 -0600'>
 
     <meta name='author' content='Matthew Prichard <green.matt@comcast.net>'>
 
@@ -124,7 +124,7 @@
                                 
                               
                                 
-                                <li><a class="page-link" href="/Write-Forward/documentation/2016/05/02/pebble.html">Pebble Formatter</a></li>
+                                <li><a class="page-link" href="/Write-Forward/documentation/2016/05/02/mustashe.html">JMustache Formatter</a></li>
                                 
                               
                                 
@@ -154,7 +154,7 @@
 
 <h2 id="project-setup">Project Setup</h2>
 
-<p>Add the following dependencies to your Maven POM. Check with The <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22ch.qos.logback%22%20AND%20a%3A%22logback-classic%22">Central Maven Repository</a> to determine the current version for Logback. Check the [download page]{ /Write-Forward/download.html } for the current Write Forward version.</p>
+<p>Add the following dependencies to your Maven POM. Check with The <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22ch.qos.logback%22%20AND%20a%3A%22logback-classic%22">Central Maven Repository</a> to determine the current version for Logback. Check the <a href="/Write-Forward/download.html">download page</a> for the current Write Forward version.</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>&lt;dependency&gt;
   &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
@@ -173,25 +173,27 @@
 <h2 id="configuring-write-forward">Configuring Write Forward</h2>
 <p>Use SLF4J to output to Logback. To configure Write Forward the recommended way is to put a configuration file in the  <code class="highlighter-rouge">/src/main/resources/</code> folder in your Java, Scala, or Kotlin project.</p>
 
-<p>Here is an example <code class="highlighter-rouge">/src/main/resources/write-forward-config.yaml</code> file for Logback.</p>
+<p>Here is an example <code class="highlighter-rouge">/src/main/resources/write-forward-config.xml</code> file for Logback.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>writeforward:
-         isslow: true
-         numberofstackframes: 5
-         outputs:
-              - name: slf4j
-                format: |+
-                    ===================================================================================================================
-                    [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
-
-                    {{ message }}
-
-                    {% if values is not empty %}
-                    {% for value in values %}
-                    {{ value.key }} = {{ value.value }}
-
-                    {% endfor %}
-                    {% endif %}
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;writeforward</span> <span class="na">slow=</span><span class="s">"true"</span> <span class="na">stackframes=</span><span class="s">"50"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;outputs&gt;</span>
+		<span class="nt">&lt;output</span> <span class="na">name=</span><span class="s">"console"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;format&gt;</span>
+{{ timestamp }} [{{ thread }}] {{ level }}{{#marker}} {{marker}}{{/marker}}{{#class}} {{ class }}.{{method}}:{{ line }}{{/class}}
+	{{ message }}
+	{{#values}}
+	{{key}} = {{value}}
+	{{/values}}
+	{{#exception}}
+	{{exception}}
+		{{#exception.stacktrace}}
+		{{this}}
+		{{/exception.stacktrace}}
+	{{/exception}}<span class="nt">&lt;/format&gt;</span>
+		<span class="nt">&lt;/output&gt;</span>
+	<span class="nt">&lt;/outputs&gt;</span>
+<span class="nt">&lt;/writeforward&gt;</span>
 </code></pre>
 </div>
 
@@ -209,16 +211,20 @@
 		<span class="nt">&lt;encoder</span> <span class="na">class=</span><span class="s">"ch.qos.logback.classic.encoder.PatternLayoutEncoder"</span><span class="nt">&gt;</span>
 		    <span class="nt">&lt;pattern&gt;</span>%msg<span class="nt">&lt;/pattern&gt;</span>
 		<span class="nt">&lt;/encoder&gt;</span>
-
 	<span class="nt">&lt;/appender&gt;</span>
 
-	<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"com.mkyong.web"</span> <span class="na">level=</span><span class="s">"debug"</span>
-		<span class="na">additivity=</span><span class="s">"false"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"LOGBACKDEFAULT"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.ConsoleAppender"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;encoder</span> <span class="na">class=</span><span class="s">"ch.qos.logback.classic.encoder.PatternLayoutEncoder"</span><span class="nt">&gt;</span>
+		    <span class="nt">&lt;pattern&gt;</span>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n<span class="nt">&lt;/pattern&gt;</span>
+		<span class="nt">&lt;/encoder&gt;</span>
+	<span class="nt">&lt;/appender&gt;</span>
+
+	<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"org.writeforward.logger.writers.Slf4jOutput"</span> <span class="na">level=</span><span class="s">"trace"</span><span class="nt">&gt;</span>
 		<span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"STDOUT"</span> <span class="nt">/&gt;</span>
 	<span class="nt">&lt;/logger&gt;</span>
 
-	<span class="nt">&lt;root</span> <span class="na">level=</span><span class="s">"debug"</span><span class="nt">&gt;</span>
-		<span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"STDOUT"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;root</span> <span class="na">level=</span><span class="s">"warn"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"LOGBACKDEFAULT"</span> <span class="nt">/&gt;</span>
 	<span class="nt">&lt;/root&gt;</span>
 
 <span class="nt">&lt;/configuration&gt;</span>

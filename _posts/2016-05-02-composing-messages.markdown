@@ -16,10 +16,23 @@ Here is an example log:
     .withValue("Broadcasting", "System")
     .withValue("Had this been", aRealEmergency)
     .withMarker("INSTRUCTIONS")
-    .withMarker("WOULDFOLLOW")
+    .withMarker("FOLLOW")
     .debug();
 
 See the Javadoc for `org.writeforward.loggger.MessageBuilder` to see all message methods.
+
+## Loggers
+
+If you want to specifiy the logger to use (as in `private Logger logger = LoggerFactory.getLogger(loggerName)`) you can do so by calling the `.withLogger(String loggerName)` method.
+This is useful for Loggers, like Log4j, that allow you to filter log messages by the logger name.
+
+Write Forward will check to see if the logging level is set using the default logger only, so if additional logging levels are disabled on a logger-by-logger basis, the logger will suffer a performance loss due to Write Forward composing the entire message. Likewise, if additional logging levels are enabled on a logger-by-logger basis, Write Forward will skip over that message, and the message will not be logged.
+
+|Framework | Default Logger| Classname |
+|----------|:-------------:|----------:|
+|Log4j     | ` Logger defaultLogger = LogManager.getLogger(Log4jOutput.class);`| org.writeforward.logger.writers.Log4jOutput
+|SLF4J     | `Logger defaultLogger = LoggerFactory.getLogger(Slf4jOutput.class);`| org.writeforward.logger.writers.Slf4jOutput
+|java.util.logging | `Logger defaultLogger = Logger.getLogger(JavaLoggingOutput.class.getName());` | org.writeforward.logger.writers.JavaLoggingOutput
 
 ## Levels
 

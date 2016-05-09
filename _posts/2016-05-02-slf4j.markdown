@@ -4,7 +4,7 @@ title:  "Using SLF4J"
 category: documentation
 ---
 
-# Using SLF4J 
+# Using SLF4J
 
 [SLF4J](http://www.slf4j.org/) is an abstraction for other logging frameworks. All of the most popular logging frameworks support a SLF4J implementation. This makes SLF4J a nice target for Write Forward to output to.
 
@@ -13,28 +13,32 @@ Output to SLF4J is done through the `org.writeforward.logger.writers.Slf4jOutput
 ## Configuring Write Forward
 To configure Write Forward the recommended way is to put a configuration file in the  `/src/main/resources/` folder in your Java, Scala or Kotlin project.
 
-Here is an example `/src/main/resources/write-forward-config.yaml` file.
+Here is an example `/src/main/resources/write-forward-config.xml` file.
 
 {% raw %}
 
-    writeforward: #Root of the configuration
-             isslow: true #If true performs slow reflection operations
-             numberofstackframes: 5 #Determines the max number of stack frames put into the message's stack trace.
-             outputs:
-                  - name: slf4j #Uses the default SLF4J outputter.
-                    format: |+ #Formats the message using Pebble
-                        ===================================================================================================================
-                        [{{ level }}] {{ marker }} {{ timestamp }} {{ thread }} {% if class is not empty %}{{ class }}:{{ line }}{% endif %}
+    <?xml version="1.0" encoding="UTF-8"?>
+    <writeforward slow="true" stackframes="50">
+    	<outputs>
+    		<output name="console">
+    			<format>
+    {{ timestamp }} [{{ thread }}] {{ level }}{{#marker}} {{marker}}{{/marker}}{{#class}} {{ class }}.{{method}}:{{ line }}{{/class}}
+    	{{ message }}
+    	{{#values}}
+    	{{key}} = {{value}}
+    	{{/values}}
+    	{{#exception}}
+    	{{exception}}
+    		{{#exception.stacktrace}}
+    		{{this}}
+    		{{/exception.stacktrace}}
+    	{{/exception}}</format>
+    		</output>
+    	</outputs>
+    </writeforward>
 
-                        {{ message }}
-
-                        {% if values is not empty %}
-                        {% for value in values %}
-                        {{ value.key }} = {{ value.value }}
-
-                        {% endfor %}
-                        {% endif %}
 {% endraw %}
+
 ## Levels
 
 Write Forward uses the following levels:
