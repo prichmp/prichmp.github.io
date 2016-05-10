@@ -17,15 +17,15 @@
 
     <meta name='robots' content='index,follow'>
     <meta name='revisit-after' content='7 days'>
-    <meta name='revised' content='2016-05-08 21:34:37 -0600'>
+    <meta name='revised' content='2016-05-10 09:46:41 -0600'>
 
     <meta name='author' content='Matthew Prichard <green.matt@comcast.net>'>
 
     <!-- Permalink location of the page (full https://www.example.com format) -->
-    <link rel="canonical" href="http://prichmp.github.io/Write-Forward/documentation/2016/05/02/composing-messages.html">
+    <link rel="canonical" href="http://writeforward.org/documentation/2016/05/02/composing-messages.html">
 
     <!-- Atom/RSS feeds -->
-    <link rel="alternate" type="application/rss+xml" title="Write Forward" href="http://prichmp.github.io/Write-Forward/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="Write Forward" href="http://writeforward.org/feed.xml">
 
     <!-- Schema.org micro data -->
     <meta itemprop="name" content="Composing messages">
@@ -33,7 +33,7 @@
     <meta itemprop="image" content="images/icons/favicon-194x194.png">
 
     <!-- Facebook open graph -->
-    <meta property="og:url" content="/Write-Forward">
+    <meta property="og:url" content="http://writeforward.org">
     <meta property="og:title" content="Composing messages">
     <meta property="og:image" content="images/icons/favicon-194x194.png">
     <meta property="og:site_name" content="Composing messages">
@@ -69,7 +69,7 @@
     <meta name="msapplication-TileColor" content="#ed1c24">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="/Write-Forward/css/site.css">
+    <link rel="stylesheet" href="/css/site.css">
 
     <!-- Syntax highlighter -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
@@ -78,7 +78,7 @@
 </head>
 
 
-  <body style="background-image:url('/Write-Forward/images/blurry.jpg');">
+  <body style="background-image:url('/images/blurry.jpg');">
 
     <div id="all">
 
@@ -87,15 +87,15 @@
         <div class="row">
 
                 <div class="column column-20">
-                    <div class="logo"><a class="site-title" href="/Write-Forward/">Write Forward</a></div>
+                    <div class="logo"><a class="site-title" href="http://writeforward.org/">Write Forward</a></div>
                 </div><!-- .column -->
 
                 <div id="nav-col" class="column column-80">
                     <nav>
                       <ul>
-                        <li><a href="/Write-Forward/">Home</a></li>
-                        <li><a href="/Write-Forward/documentation.html">Documentation</a></li>
-                        <li><a href="/Write-Forward/download.html">Download</a></li>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/documentation.html">Documentation</a></li>
+                        <li><a href="/download.html">Download</a></li>
                         <li><a href="//github.com/prichmp/Write-Forward">GitHub</a></li>
                       </ul>
                     </nav>
@@ -116,31 +116,31 @@
                             <ul class="toc">
                               
                                 
-                                <li><a class="page-link" href="/Write-Forward/documentation/2016/05/03/configuration.html">Configuring Write Forward</a></li>
+                                <li><a class="page-link" href="/documentation/2016/05/03/configuration.html">Configuring Write Forward</a></li>
                                 
                               
                                 
-                                <li><a class="page-link" href="/Write-Forward/documentation/2016/05/02/slf4j.html">Using SLF4J</a></li>
+                                <li><a class="page-link" href="/documentation/2016/05/02/slf4j.html">Using SLF4J</a></li>
                                 
                               
                                 
-                                <li><a class="page-link" href="/Write-Forward/documentation/2016/05/02/mustashe.html">JMustache Formatter</a></li>
+                                <li><a class="page-link" href="/documentation/2016/05/02/mustashe.html">JMustache Formatter</a></li>
                                 
                               
                                 
-                                <li><a class="page-link" href="/Write-Forward/documentation/2016/05/02/logback.html">Using Logback</a></li>
+                                <li><a class="page-link" href="/documentation/2016/05/02/logback.html">Using Logback</a></li>
                                 
                               
                                 
-                                <li><a class="page-link" href="/Write-Forward/documentation/2016/05/02/log4j.html">Using Log4j</a></li>
+                                <li><a class="page-link" href="/documentation/2016/05/02/log4j.html">Using Log4j</a></li>
                                 
                               
                                 
-                                <li><a class="page-link" href="/Write-Forward/documentation/2016/05/02/javautillogging.html">Using java.util.logging</a></li>
+                                <li><a class="page-link" href="/documentation/2016/05/02/javautillogging.html">Using java.util.logging</a></li>
                                 
                               
                                 
-                                <li><a class="page-link" href="/Write-Forward/documentation/2016/05/02/composing-messages.html">Composing messages</a></li>
+                                <li><a class="page-link" href="/documentation/2016/05/02/composing-messages.html">Composing messages</a></li>
                                 
                               
                             </ul>
@@ -176,9 +176,9 @@ This is useful for Loggers, like Log4j, that allow you to filter log messages by
 <p>Write Forward will check to see if the logging level is set using the default logger only, so if additional logging levels are disabled on a logger-by-logger basis, the logger will suffer a performance loss due to Write Forward composing the entire message. Likewise, if additional logging levels are enabled on a logger-by-logger basis, Write Forward will skip over that message, and the message will not be logged.</p>
 
 <p>|Framework | Default Logger| Classname |
-|———-|:————-:|———-:|
-|Log4j     | ` Logger defaultLogger = LogManager.getLogger(Log4jOutput.class);<code class="highlighter-rouge">| org.writeforward.logger.writers.Log4jOutput
-|SLF4J     | </code>Logger defaultLogger = LoggerFactory.getLogger(Slf4jOutput.class);<code class="highlighter-rouge">| org.writeforward.logger.writers.Slf4jOutput
+|:———|:————-:|———-:|
+|Log4j     | ` Logger defaultLogger = LogManager.getLogger(Log4jOutput.class);<code class="highlighter-rouge"> | org.writeforward.logger.writers.Log4jOutput
+|SLF4J     | </code>Logger defaultLogger = LoggerFactory.getLogger(Slf4jOutput.class);<code class="highlighter-rouge"> | org.writeforward.logger.writers.Slf4jOutput
 |java.util.logging | </code>Logger defaultLogger = Logger.getLogger(JavaLoggingOutput.class.getName());` | org.writeforward.logger.writers.JavaLoggingOutput</p>
 
 <h2 id="levels">Levels</h2>

@@ -4,10 +4,10 @@
     <title>Write Forward</title>
     <description>The Write Forward Logging Framework for Java simplifies logging for Java. Write easy-to-use, portable, and future-proof logging code. Works with SLF4J, Log4J, Logback, and java.util.logging.
 </description>
-    <link>http://prichmp.github.io/Write-Forward/</link>
-    <atom:link href="http://prichmp.github.io/Write-Forward/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 08 May 2016 21:34:37 -0600</pubDate>
-    <lastBuildDate>Sun, 08 May 2016 21:34:37 -0600</lastBuildDate>
+    <link>http://writeforward.org/</link>
+    <atom:link href="http://writeforward.org/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 10 May 2016 09:46:41 -0600</pubDate>
+    <lastBuildDate>Tue, 10 May 2016 09:46:41 -0600</lastBuildDate>
     <generator>Jekyll v3.1.3</generator>
     
       <item>
@@ -24,12 +24,8 @@
 &lt;p&gt;Currently Write Forward honors two system properties:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;writeforward.configuration&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Sets the location of the configuration file. Write Forward will first attempt to load the file on the classpath using &lt;code class=&quot;highlighter-rouge&quot;&gt;.getResourceAsStream(configLocation)&lt;/code&gt;, and if that fails Write Forward will load it as a file using &lt;code class=&quot;highlighter-rouge&quot;&gt;new File(configLocation)&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Type: String/Filepath&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;writeforward.configuration.isslow&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Sets if Write Forward should perform the slow reflection operations: get stacktrace, find file/class/method/line the log was call from.&lt;/li&gt;
-  &lt;li&gt;Type: boolean (true/false)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;writeforward.configuration&lt;/code&gt; sets the location of the configuration file. Write Forward will first attempt to load the file on the classpath using &lt;code class=&quot;highlighter-rouge&quot;&gt;.getResourceAsStream(configLocation)&lt;/code&gt;, and if that fails Write Forward will load it as a file using &lt;code class=&quot;highlighter-rouge&quot;&gt;new File(configLocation)&lt;/code&gt;. Type: String/Filepath&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;writeforward.configuration.isslow&lt;/code&gt; sets if Write Forward should perform the slow reflection operations: get stacktrace, find file/class/method/line the log was call from. Type: boolean (true/false)&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;You can run your project with command line arguments. For example: &lt;code class=&quot;highlighter-rouge&quot;&gt;java -Dwriteforward.configuration=&quot;C:\Users\Me\MyProject\loggerconfig.yaml&quot; -Dwriteforward.configuration.isslow=&quot;true&quot; -jar myApplication.jar&lt;/code&gt;&lt;/p&gt;
@@ -141,8 +137,8 @@ Configurator.build() //Starts a new programmatic configuration.
 
 </description>
         <pubDate>Tue, 03 May 2016 00:00:00 -0600</pubDate>
-        <link>http://prichmp.github.io/Write-Forward/documentation/2016/05/03/configuration.html</link>
-        <guid isPermaLink="true">http://prichmp.github.io/Write-Forward/documentation/2016/05/03/configuration.html</guid>
+        <link>http://writeforward.org/documentation/2016/05/03/configuration.html</link>
+        <guid isPermaLink="true">http://writeforward.org/documentation/2016/05/03/configuration.html</guid>
         
         
         <category>documentation</category>
@@ -204,8 +200,8 @@ Configurator.build() //Starts a new programmatic configuration.
 &lt;p&gt;There is no FATAL level in SLF4J. When Write Forward uses SLF4J, it adds a “FATAL” marker to any FATAL-level events. SLF4J will convert the fatal marker back into the FATAL level if the underlying framework supports the FATAL logging level.&lt;/p&gt;
 </description>
         <pubDate>Mon, 02 May 2016 00:00:00 -0600</pubDate>
-        <link>http://prichmp.github.io/Write-Forward/documentation/2016/05/02/slf4j.html</link>
-        <guid isPermaLink="true">http://prichmp.github.io/Write-Forward/documentation/2016/05/02/slf4j.html</guid>
+        <link>http://writeforward.org/documentation/2016/05/02/slf4j.html</link>
+        <guid isPermaLink="true">http://writeforward.org/documentation/2016/05/02/slf4j.html</guid>
         
         
         <category>documentation</category>
@@ -339,8 +335,8 @@ Configurator.build() //Starts a new programmatic configuration.
 &lt;/table&gt;
 </description>
         <pubDate>Mon, 02 May 2016 00:00:00 -0600</pubDate>
-        <link>http://prichmp.github.io/Write-Forward/documentation/2016/05/02/mustashe.html</link>
-        <guid isPermaLink="true">http://prichmp.github.io/Write-Forward/documentation/2016/05/02/mustashe.html</guid>
+        <link>http://writeforward.org/documentation/2016/05/02/mustashe.html</link>
+        <guid isPermaLink="true">http://writeforward.org/documentation/2016/05/02/mustashe.html</guid>
         
         
         <category>documentation</category>
@@ -355,7 +351,7 @@ Configurator.build() //Starts a new programmatic configuration.
 
 &lt;h2 id=&quot;project-setup&quot;&gt;Project Setup&lt;/h2&gt;
 
-&lt;p&gt;Add the following dependencies to your Maven POM. Check with The &lt;a href=&quot;http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22ch.qos.logback%22%20AND%20a%3A%22logback-classic%22&quot;&gt;Central Maven Repository&lt;/a&gt; to determine the current version for Logback. Check the &lt;a href=&quot;/Write-Forward/download.html&quot;&gt;download page&lt;/a&gt; for the current Write Forward version.&lt;/p&gt;
+&lt;p&gt;Add the following dependencies to your Maven POM. Check with The &lt;a href=&quot;http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22ch.qos.logback%22%20AND%20a%3A%22logback-classic%22&quot;&gt;Central Maven Repository&lt;/a&gt; to determine the current version for Logback. Check the &lt;a href=&quot;/download.html&quot;&gt;download page&lt;/a&gt; for the current Write Forward version.&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
   &amp;lt;groupId&amp;gt;ch.qos.logback&amp;lt;/groupId&amp;gt;
@@ -433,8 +429,8 @@ Configurator.build() //Starts a new programmatic configuration.
 &lt;/div&gt;
 </description>
         <pubDate>Mon, 02 May 2016 00:00:00 -0600</pubDate>
-        <link>http://prichmp.github.io/Write-Forward/documentation/2016/05/02/logback.html</link>
-        <guid isPermaLink="true">http://prichmp.github.io/Write-Forward/documentation/2016/05/02/logback.html</guid>
+        <link>http://writeforward.org/documentation/2016/05/02/logback.html</link>
+        <guid isPermaLink="true">http://writeforward.org/documentation/2016/05/02/logback.html</guid>
         
         
         <category>documentation</category>
@@ -449,7 +445,7 @@ Configurator.build() //Starts a new programmatic configuration.
 
 &lt;h2 id=&quot;project-setup&quot;&gt;Project Setup&lt;/h2&gt;
 
-&lt;p&gt;Add the following dependencies to your Maven POM. Check with the &lt;a href=&quot;http://search.maven.org/&quot;&gt;Central Maven Repository&lt;/a&gt; to determine the current version for Log4j. Check the &lt;a href=&quot;/Write-Forward/download.html&quot;&gt;download page&lt;/a&gt; for the current Write Forward version.&lt;/p&gt;
+&lt;p&gt;Add the following dependencies to your Maven POM. Check with the &lt;a href=&quot;http://search.maven.org/&quot;&gt;Central Maven Repository&lt;/a&gt; to determine the current version for Log4j. Check the &lt;a href=&quot;/download.html&quot;&gt;download page&lt;/a&gt; for the current Write Forward version.&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
   &amp;lt;groupId&amp;gt;org.apache.logging.log4j&amp;lt;/groupId&amp;gt;
@@ -528,8 +524,8 @@ Configurator.build() //Starts a new programmatic configuration.
 &lt;p&gt;The logger with the name  &lt;code class=&quot;highlighter-rouge&quot;&gt;org.writeforward.logger.writers.Log4jOutput&lt;/code&gt; represents the default logger from WriteForward, and it is written plainly out with the &lt;code class=&quot;highlighter-rouge&quot;&gt;%msg%n&lt;/code&gt; format. Everything else is written out with the Log4j default pattern.&lt;/p&gt;
 </description>
         <pubDate>Mon, 02 May 2016 00:00:00 -0600</pubDate>
-        <link>http://prichmp.github.io/Write-Forward/documentation/2016/05/02/log4j.html</link>
-        <guid isPermaLink="true">http://prichmp.github.io/Write-Forward/documentation/2016/05/02/log4j.html</guid>
+        <link>http://writeforward.org/documentation/2016/05/02/log4j.html</link>
+        <guid isPermaLink="true">http://writeforward.org/documentation/2016/05/02/log4j.html</guid>
         
         
         <category>documentation</category>
@@ -544,7 +540,7 @@ Configurator.build() //Starts a new programmatic configuration.
 
 &lt;h2 id=&quot;project-setup&quot;&gt;Project Setup&lt;/h2&gt;
 
-&lt;p&gt;Add Write Forward to your project. Check the &lt;a href=&quot;/Write-Forward/download.html&quot;&gt;download page&lt;/a&gt; for the current Write Forward version.&lt;/p&gt;
+&lt;p&gt;Add Write Forward to your project. Check the &lt;a href=&quot;/download.html&quot;&gt;download page&lt;/a&gt; for the current Write Forward version.&lt;/p&gt;
 
 &lt;h2 id=&quot;configuring-write-forward&quot;&gt;Configuring Write Forward&lt;/h2&gt;
 &lt;p&gt;To configure Write Forward the recommended way is to put a configuration file in the  &lt;code class=&quot;highlighter-rouge&quot;&gt;/src/main/resources/&lt;/code&gt; folder in your Java, Scala, or Kotlin project.&lt;/p&gt;
@@ -589,8 +585,8 @@ Configurator.build() //Starts a new programmatic configuration.
 &lt;/table&gt;
 </description>
         <pubDate>Mon, 02 May 2016 00:00:00 -0600</pubDate>
-        <link>http://prichmp.github.io/Write-Forward/documentation/2016/05/02/javautillogging.html</link>
-        <guid isPermaLink="true">http://prichmp.github.io/Write-Forward/documentation/2016/05/02/javautillogging.html</guid>
+        <link>http://writeforward.org/documentation/2016/05/02/javautillogging.html</link>
+        <guid isPermaLink="true">http://writeforward.org/documentation/2016/05/02/javautillogging.html</guid>
         
         
         <category>documentation</category>
@@ -627,9 +623,9 @@ This is useful for Loggers, like Log4j, that allow you to filter log messages by
 &lt;p&gt;Write Forward will check to see if the logging level is set using the default logger only, so if additional logging levels are disabled on a logger-by-logger basis, the logger will suffer a performance loss due to Write Forward composing the entire message. Likewise, if additional logging levels are enabled on a logger-by-logger basis, Write Forward will skip over that message, and the message will not be logged.&lt;/p&gt;
 
 &lt;p&gt;|Framework | Default Logger| Classname |
-|———-|:————-:|———-:|
-|Log4j     | ` Logger defaultLogger = LogManager.getLogger(Log4jOutput.class);&lt;code class=&quot;highlighter-rouge&quot;&gt;| org.writeforward.logger.writers.Log4jOutput
-|SLF4J     | &lt;/code&gt;Logger defaultLogger = LoggerFactory.getLogger(Slf4jOutput.class);&lt;code class=&quot;highlighter-rouge&quot;&gt;| org.writeforward.logger.writers.Slf4jOutput
+|:———|:————-:|———-:|
+|Log4j     | ` Logger defaultLogger = LogManager.getLogger(Log4jOutput.class);&lt;code class=&quot;highlighter-rouge&quot;&gt; | org.writeforward.logger.writers.Log4jOutput
+|SLF4J     | &lt;/code&gt;Logger defaultLogger = LoggerFactory.getLogger(Slf4jOutput.class);&lt;code class=&quot;highlighter-rouge&quot;&gt; | org.writeforward.logger.writers.Slf4jOutput
 |java.util.logging | &lt;/code&gt;Logger defaultLogger = Logger.getLogger(JavaLoggingOutput.class.getName());` | org.writeforward.logger.writers.JavaLoggingOutput&lt;/p&gt;
 
 &lt;h2 id=&quot;levels&quot;&gt;Levels&lt;/h2&gt;
@@ -651,8 +647,8 @@ This is useful for Loggers, like Log4j, that allow you to filter log messages by
 &lt;/table&gt;
 </description>
         <pubDate>Mon, 02 May 2016 00:00:00 -0600</pubDate>
-        <link>http://prichmp.github.io/Write-Forward/documentation/2016/05/02/composing-messages.html</link>
-        <guid isPermaLink="true">http://prichmp.github.io/Write-Forward/documentation/2016/05/02/composing-messages.html</guid>
+        <link>http://writeforward.org/documentation/2016/05/02/composing-messages.html</link>
+        <guid isPermaLink="true">http://writeforward.org/documentation/2016/05/02/composing-messages.html</guid>
         
         
         <category>documentation</category>
