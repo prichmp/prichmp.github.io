@@ -16,11 +16,11 @@ There are three methods that apply configuration to Write Forward:
 Currently Write Forward honors two system properties:
 
  - `writeforward.configuration`
-  - Sets the location of the configuration file. Write Forward will first attempt to load the file on the classpath using `.getResourceAsStream(configLocation)`, and if that fails Write Forward will load it as a file using `new File(configLocation)`.
-  - Type: String/Filepath
+    - Sets the location of the configuration file. Write Forward will first attempt to load the file on the classpath using `.getResourceAsStream(configLocation)`, and if that fails Write Forward will load it as a file using `new File(configLocation)`.
+    - Type: String/Filepath
  - `writeforward.configuration.isslow`
-  - Sets if Write Forward should perform the slow reflection operations: get stacktrace, find file/class/method/line the log was call from.
-  - Type: boolean (true/false)
+    - Sets if Write Forward should perform the slow reflection operations: get stacktrace, find file/class/method/line the log was call from.
+    - Type: boolean (true/false)
 
 You can run your project with command line arguments. For example: `java -Dwriteforward.configuration="C:\Users\Me\MyProject\loggerconfig.yaml" -Dwriteforward.configuration.isslow="true" -jar myApplication.jar`
 
@@ -128,5 +128,5 @@ If a configuration file is not found on the classpath, Write forward will check 
     		</output>
     	</outputs>
     </writeforward>
-    
+
  {% endraw %}
