@@ -29,9 +29,9 @@ This is useful for Loggers, like Log4j, that allow you to filter log messages by
 Write Forward will check to see if the logging level is set using the default logger only, so if additional logging levels are disabled on a logger-by-logger basis, the logger will suffer a performance loss due to Write Forward composing the entire message. Likewise, if additional logging levels are enabled on a logger-by-logger basis, Write Forward will skip over that message, and the message will not be logged.
 
 |Framework | Default Logger| Classname |
-|----------|:-------------:|----------:|
-|Log4j     | ` Logger defaultLogger = LogManager.getLogger(Log4jOutput.class);`| org.writeforward.logger.writers.Log4jOutput
-|SLF4J     | `Logger defaultLogger = LoggerFactory.getLogger(Slf4jOutput.class);`| org.writeforward.logger.writers.Slf4jOutput
+|:---------|:-------------:|----------:|
+|Log4j     | ` Logger defaultLogger = LogManager.getLogger(Log4jOutput.class);` | org.writeforward.logger.writers.Log4jOutput
+|SLF4J     | `Logger defaultLogger = LoggerFactory.getLogger(Slf4jOutput.class);` | org.writeforward.logger.writers.Slf4jOutput
 |java.util.logging | `Logger defaultLogger = Logger.getLogger(JavaLoggingOutput.class.getName());` | org.writeforward.logger.writers.JavaLoggingOutput
 
 ## Levels
