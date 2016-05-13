@@ -17,7 +17,7 @@
 
     <meta name='robots' content='index,follow'>
     <meta name='revisit-after' content='7 days'>
-    <meta name='revised' content='2016-05-10 09:46:41 -0600'>
+    <meta name='revised' content='2016-05-13 11:09:56 -0600'>
 
     <meta name='author' content='Matthew Prichard <green.matt@comcast.net>'>
 
@@ -69,7 +69,7 @@
     <meta name="msapplication-TileColor" content="#ed1c24">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="/css/site.css">
+    <link rel="stylesheet" href="http://writeforward.org/css/site.css">
 
     <!-- Syntax highlighter -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
@@ -95,6 +95,7 @@
                       <ul>
                         <li><a href="/">Home</a></li>
                         <li><a href="/documentation.html">Documentation</a></li>
+                        <li><a href="/doc/index.html">Javadoc</a></li>
                         <li><a href="/download.html">Download</a></li>
                         <li><a href="//github.com/prichmp/Write-Forward">GitHub</a></li>
                       </ul>
@@ -175,11 +176,30 @@ This is useful for Loggers, like Log4j, that allow you to filter log messages by
 
 <p>Write Forward will check to see if the logging level is set using the default logger only, so if additional logging levels are disabled on a logger-by-logger basis, the logger will suffer a performance loss due to Write Forward composing the entire message. Likewise, if additional logging levels are enabled on a logger-by-logger basis, Write Forward will skip over that message, and the message will not be logged.</p>
 
-<p>|Framework | Default Logger| Classname |
-|:———|:————-:|———-:|
-|Log4j     | ` Logger defaultLogger = LogManager.getLogger(Log4jOutput.class);<code class="highlighter-rouge"> | org.writeforward.logger.writers.Log4jOutput
-|SLF4J     | </code>Logger defaultLogger = LoggerFactory.getLogger(Slf4jOutput.class);<code class="highlighter-rouge"> | org.writeforward.logger.writers.Slf4jOutput
-|java.util.logging | </code>Logger defaultLogger = Logger.getLogger(JavaLoggingOutput.class.getName());` | org.writeforward.logger.writers.JavaLoggingOutput</p>
+<h3 id="default-loggers">Default Loggers</h3>
+
+<p>The following shows the default logger creation statement and the full class name for the class that creates the logger.</p>
+
+<ul>
+  <li>Log4j
+    <ul>
+      <li><code class="highlighter-rouge">Logger defaultLogger = LogManager.getLogger(Log4jOutput.class);</code></li>
+      <li>org.writeforward.logger.writers.Log4jOutput</li>
+    </ul>
+  </li>
+  <li>SLF4J
+    <ul>
+      <li><code class="highlighter-rouge">Logger defaultLogger = LoggerFactory.getLogger(Slf4jOutput.class);</code></li>
+      <li>org.writeforward.logger.writers.Slf4jOutput</li>
+    </ul>
+  </li>
+  <li>java.util.logging
+    <ul>
+      <li><code class="highlighter-rouge">Logger defaultLogger = Logger.getLogger(JavaLoggingOutput.class.getName());</code></li>
+      <li>org.writeforward.logger.writers.JavaLoggingOutput</li>
+    </ul>
+  </li>
+</ul>
 
 <h2 id="levels">Levels</h2>
 

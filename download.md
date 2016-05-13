@@ -16,15 +16,15 @@ Thanks for downloading Write Forward!
     <dependency>
       <groupId>org.writeforward</groupId>
       <artifactId>logger</artifactId>
-      <version>0.0.2</version>
+      <version>0.0.1</version>
     </dependency>
 
 ### Gradle
-    'org.writeforward:logger:0.0.2'
+    'org.writeforward:logger:0.0.1'
 
 
 ### SBT
-    libraryDependencies += "org.writeforward" % "logger" % "0.0.2"
+    libraryDependencies += "org.writeforward" % "logger" % "0.0.1"
 
 ### Source
 Download from Github [here](https://github.com/prichmp/Write-Forward).
